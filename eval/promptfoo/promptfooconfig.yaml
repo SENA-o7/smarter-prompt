@@ -1,0 +1,64 @@
+# promptfoo ile meta-prompt regresyon testleri (3-4. hafta, K3)
+#
+# Ne test eder? Çalışan sunucunun /enhance cevabı için:
+#   - tam 5 seçenek var mı, her strateji bir kez mi?
+#   - Türkçe prompt'a Türkçe cevap mı geldi?
+#   - "neden" açıklamaları dolu ve tek cümle civarında mı?
+#   - bilinmeyen bilgi için [köşeli parantez] boşluğu bırakılmış mı? (yüksek belirsizlikte)
+#
+# Çalıştırma (sunucu açıkken, repo kökünden):
+#   npx promptfoo@latest eval -c eval/promptfoo/promptfooconfig.yaml
+#   npx promptfoo@latest view      # sonuçları tarayıcıda tablo olarak gösterir
+#
+# Meta-prompt'u her değiştirdiğinizde çalıştırın: v0'da geçen bir test v1'de kırılırsa
+# değişiklik bir şeyi bozmuş demektir.
+
+description: Smarter Prompt meta-prompt testleri
+
+providers:
+  - id: http
+    label: smarter-prompt-sunucu
+    config:
+      url: http://localhost:8000/enhance
+      method: POST
+      headers:
+        Content-Type: application/json
+      body:
+        prompt: '{{prompt}}'
+      transformResponse: json
+
+# Testler CSV'den gelir: her satır bir test, "prompt" sütunu değişken olur.
+tests: file://testler.csv
+
+# Her teste uygulanan ortak kontroller
+defaultTest:
+  assert:
+    - type: javascript
+      metric: bes_secenek
+      value: |
+        const s = output.secenekler || [];
+        const stratejiler = new Set(s.map(x => x.strateji));
+        return s.length === 5 && stratejiler.size === 5;
+
+    - type: javascript
+      metric: neden_dolu
+      value: |
+        return output.secenekler.every(x => x.neden.length > 10 && x.neden.length < 300);
+
+    - type: javascript
+      metric: turkce_cevap
+      # Türkçe prompt'larda (CSV'de dil=tr) cevapta Türkçe karakter veya sık Türkçe kelime olmalı
+      value: |
+        if (context.vars.dil !== 'tr') return true;
+        const metin = output.secenekler.map(x => x.prompt).join(' ');
+        return /[çğıöşüÇĞİÖŞÜ]/.test(metin) || /\b(ve|bir|için|ile)\b/.test(metin);
+
+    - type: javascript
+      metric: bosluk_birakma
+      # Yüksek belirsizlikte en az bir seçenekte [köşeli parantezli] boşluk beklenir (uydurmama kuralı)
+      value: |
+        if (context.vars.belirsizlik !== 'yuksek') return true;
+        return output.secenekler.some(x => /\[[^\]]+\]/.test(x.prompt));
+
+    - type: latency
+      threshold: 8000
