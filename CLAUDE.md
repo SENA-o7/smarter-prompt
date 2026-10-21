@@ -65,8 +65,9 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 
 ### Gerçek model testi (21.10.2026)
 - Model: `gemini/gemini-3.5-flash-lite` (`gemini-2.5-flash`'ın ücretsiz kotası günde 20 istek; bugün doldu).
-- Meta-prompt v0, 10 prompt: şema %100, görev türü uyumu %100, **medyan 5.3 sn** (hedef < 4 sn ❌).
-  CSV: `eval/results/meta_prompt_v0_20261021-1519.csv`. v1 sonucu: `eval/results/meta_prompt_v1_*.csv`.
+- 10 prompt: v0 ve v1 ikisi de şema %100, görev türü uyumu %100. Medyan süre v0 5.3 sn, v1 13.9 sn; ama art arda
+  kontrolde fark yok → **gecikmeyi Google'ın o anki yükü belirliyor** (4-21 sn). Hedef < 4 sn ücretsiz katmanda tutmuyor.
+  CSV'ler: `eval/results/meta_prompt_v{0,1}_20261021-15*.csv`. Varsayılan sürüm: v1.
 - Ayrıntılı gözlemler: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`, `ZEYNEP_README.md`.
 
 ### Bitti

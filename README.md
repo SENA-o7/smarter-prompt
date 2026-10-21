@@ -21,7 +21,8 @@ her seçeneğin neden daha iyi olduğunu açıklar ve seçimi kullanıcıya bır
 - **Hafta 1-4** (MVP): sunucu, ChatGPT eklentisi, test seti, ölçüm, CI → [SENA_README.md](SENA_README.md)
 - **Hafta 5-9**: Claude + Gemini desteği, ayarlar, anonim seçim kaydı, hakem değerlendirmesi, kullanıcı çalışması
   materyalleri, analiz betikleri, Gemini Nano yerel mod → [ZEYNEP_README.md](ZEYNEP_README.md)
-- **Gerçek model testi** (`gemini-3.5-flash-lite`, 10 prompt): geçerli cevap %100, görev türü uyumu %100, medyan 5.3 sn.
+- **Gerçek model testi** (`gemini-3.5-flash-lite`, 10 prompt, meta-prompt v0 ve v1): geçerli cevap %100, görev türü
+  uyumu %100; süre Google'ın yüküne göre 4-21 sn (ayrıntı: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`).
 - **Henüz tarayıcıda denenmedi.** Nerede kaldık ve sıradaki işler: [CLAUDE.md](CLAUDE.md)
 
 ## Repo yapısı

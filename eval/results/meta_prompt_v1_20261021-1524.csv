@@ -1,0 +1,11 @@
+id,prompt,durum,gecerli,sure_ms,etiket_gorev,model_gorev,eksik_bilgi_sayisi
+tp-0001,bana kod yaz,200,True,13305,kod,kod,4
+tp-0002,bunu özetle,200,True,8320,yazi,yazi,4
+tp-0003,python'da liste nasıl sıralanır,200,True,21551,kod,kod,3
+tp-0004,hocama mail yaz ödevi geç teslim edicem,200,True,16003,yazi,yazi,4
+tp-0005,bir kedi resmi çiz,200,True,14419,gorsel,gorsel,5
+tp-0006,bu hatayı düzelt,200,True,10513,kod,kod,3
+tp-0007,enflasyon neden artıyor,200,True,15131,analiz,analiz,2
+tp-0008,cv'mi daha iyi yap,200,True,12581,yazi,yazi,3
+tp-0009,react ile todo uygulaması,200,True,15593,kod,kod,3
+tp-0010,iphone mu samsung mu,200,True,13396,analiz,analiz,3
