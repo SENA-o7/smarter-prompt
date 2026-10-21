@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smarter Prompt — Ayarlar</title>
+    <meta name="manifest.open_in_tab" content="true" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>✨ Smarter Prompt — Ayarlar</h1>
+
+      <section>
+        <h2>Dil</h2>
+        <label for="dil">Geliştirilmiş prompt'lar hangi dilde yazılsın?</label>
+        <select id="dil">
+          <option value="auto">Benim yazdığım dilde (otomatik)</option>
+          <option value="tr">Her zaman Türkçe</option>
+          <option value="en">Her zaman İngilizce</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>Çalışma modu</h2>
+        <label><input type="radio" name="mod" value="bulut" /> <b>Bulut</b> (önerilen): en iyi kalite.
+          Prompt metniniz Smarter Prompt sunucusuna ve model sağlayıcısına gider.</label>
+        <label><input type="radio" name="mod" value="yerel" /> <b>Yerel (deneysel)</b>: Chrome'un yerleşik
+          Gemini Nano modeli. Prompt bilgisayarınızdan çıkmaz. Kullanılamazsa otomatik olarak buluta döner.</label>
+        <p class="not">Yerel model durumu: <span id="yerelDurum">kontrol ediliyor…</span></p>
+      </section>
+
+      <section>
+        <h2>Kullanıcı çalışması</h2>
+        <label><input type="checkbox" id="kayit" /> Araştırmaya katılmayı kabul ediyorum.</label>
+        <p class="not">
+          Açıksa yalnızca şu <b>anonim</b> bilgiler gönderilir: seçtiğiniz strateji, görev türü, göndermeden
+          önce düzenleyip düzenlemediğiniz ve seçim süresi. <b>Prompt metniniz asla kaydedilmez.</b>
+          İstediğiniz zaman bu kutuyu kapatarak çıkabilirsiniz. Katılımcı kimliğiniz rastgeledir:
+          <code id="oturum"></code>
+        </p>
+      </section>
+
+      <p id="kaydedildi" role="status"></p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

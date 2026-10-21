@@ -8,6 +8,7 @@
 import { z } from 'zod';
 
 export const STRATEJILER = ['net', 'detayli', 'adim_adim', 'format', 'soru'] as const;
+export const GOREV_TURLERI = ['kod', 'yazi', 'analiz', 'gorsel', 'diger'] as const;
 
 /** Tek bir seçenek kartı */
 export const SecenekSchema = z.object({
@@ -17,11 +18,18 @@ export const SecenekSchema = z.object({
   neden: z.string().min(1),
 });
 
-/** POST /enhance cevabı */
-export const EnhanceResponseSchema = z.object({
-  gorev_turu: z.enum(['kod', 'yazi', 'analiz', 'gorsel', 'diger']),
+/** Modelin ürettiği çıktı (yerel modda Gemini Nano'nun cevabı da buna uymalı) */
+export const GelistirmeSonucuSchema = z.object({
+  gorev_turu: z.enum(GOREV_TURLERI),
   eksik_bilgiler: z.array(z.string()),
-  secenekler: z.array(SecenekSchema).length(5),
+  secenekler: z
+    .array(SecenekSchema)
+    .length(5)
+    .refine((s) => new Set(s.map((x) => x.strateji)).size === 5, '5 stratejinin her biri bir kez olmalı'),
+});
+
+/** POST /enhance cevabı = model çıktısı + ölçüm bilgileri */
+export const EnhanceResponseSchema = GelistirmeSonucuSchema.extend({
   model: z.string(),
   meta_prompt_surumu: z.string(),
   sure_ms: z.number(),
@@ -29,10 +37,26 @@ export const EnhanceResponseSchema = z.object({
 
 // Şemalardan TypeScript tiplerini otomatik türet (tipleri iki kez yazmamak için)
 export type Secenek = z.infer<typeof SecenekSchema>;
+export type GorevTuru = (typeof GOREV_TURLERI)[number];
 export type EnhanceResponse = z.infer<typeof EnhanceResponseSchema>;
 
 export type Site = 'chatgpt' | 'claude' | 'gemini' | 'diger';
 
+/**
+ * POST /event gövdesi: anonim seçim kaydı (kullanıcı çalışması, AS3).
+ * Bilerek prompt metni İÇERMEZ.
+ */
+export type SecimOlayi = {
+  oturum_id: string;
+  site: Site;
+  strateji: Secenek['strateji'];
+  gorev_turu: GorevTuru;
+  duzenlendi: boolean; // kullanıcı seçtiği prompt'u göndermeden önce değiştirdi mi?
+  secim_suresi_ms: number; // panel açıldıktan sonra kaç ms'de seçti
+  meta_prompt_surumu: string;
+};
+
 // --- İçerik betiği ↔ arka plan betiği mesajları ---
 export type GelistirIstegi = { tur: 'gelistir'; prompt: string; site: Site };
 export type GelistirCevabi = { ok: true; veri: EnhanceResponse } | { ok: false; hata: string };
+export type OlayMesaji = { tur: 'olay'; olay: Omit<SecimOlayi, 'oturum_id'> };
