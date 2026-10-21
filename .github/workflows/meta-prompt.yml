@@ -1,0 +1,44 @@
+# Meta-prompt testi: GERÇEK modelle 20 prompt'luk promptfoo testi.
+# Para harcadığı için her PR'da değil; elle (Actions → Run workflow), haftada bir ve
+# "meta-prompt" etiketli PR'larda çalışır.
+#
+# Gerekli secret: Settings → Secrets and variables → Actions → GEMINI_API_KEY
+# (Başka sağlayıcı kullanıyorsanız MODEL'i ve anahtar adını değiştirin.)
+name: Meta-prompt testi
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # her pazartesi 09:00 (TR)
+  pull_request:
+    types: [labeled, synchronize]
+
+jobs:
+  promptfoo:
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'meta-prompt')
+    runs-on: ubuntu-latest
+    env:
+      MODEL: gemini/gemini-2.5-flash
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      HIZ_SINIRI: 200/minute
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sunucuyu başlat
+        working-directory: server
+        run: |
+          pip install -r requirements.txt
+          uvicorn app.main:app --port 8000 &
+          for i in $(seq 1 30); do curl -sf localhost:8000/health && break; sleep 1; done
+      - name: promptfoo
+        run: npx -y promptfoo@latest eval -c eval/promptfoo/promptfooconfig.yaml --no-cache -o promptfoo-sonuc.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: promptfoo-sonuc
+          path: promptfoo-sonuc.json

@@ -1,0 +1,30 @@
+# Gizli bilgiler
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node / WXT
+node_modules/
+.output/
+.wxt/
+*.zip
+
+# Veri: ham veri ASLA commit edilmez (bkz. data/README.md)
+data/raw/*
+!data/raw/.gitkeep
+data/user_study/ham/
+
+# Degerlendirme ham ciktilari (ozet CSV'ler repoya girer)
+eval/results/ham/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,7 @@
+# Ilgili klasorde degisiklik olunca sahibi otomatik inceleyici olur.
+# Kullanici adlarini ekip uyelerinin GitHub adlariyla degistirin (K1 / K2 / K3).
+# /extension/  @K1-kullanici-adi
+# /server/     @K2-kullanici-adi
+# /eval/       @K3-kullanici-adi
+# /data/       @K3-kullanici-adi
+# /docs/       @K3-kullanici-adi

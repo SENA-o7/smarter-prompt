@@ -1,0 +1,4 @@
+# Tum metin dosyalari repoda LF satir sonuyla saklanir (Windows/Mac farki diff kirliligi yaratmasin)
+* text=auto eol=lf
+*.png binary
+*.pdf binary
