@@ -1,0 +1,8 @@
+# Değerlendirme ve analiz betikleri (eval/) için. Sunucu venv'ine de kurulabilir:
+#   server/.venv/Scripts/pip install -r eval/requirements.txt
+litellm>=1.50
+httpx>=0.27
+python-dotenv>=1.0
+pandas>=2.2
+scipy>=1.13
+matplotlib>=3.9

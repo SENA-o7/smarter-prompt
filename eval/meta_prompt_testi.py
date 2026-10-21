@@ -14,7 +14,11 @@ Kullanım (önce sunucuyu başlatın: cd server && uvicorn app.main:app --port 8
     eval/results/meta_prompt_<surum>_<tarih>.csv         → satır başına özet (repoya girer)
     Terminalde özet tablo (rapora / günlüğe kopyalanabilir)
 
-Not: Sunucunun hız sınırı varsayılan 20/dk. 100 prompt için .env'de HIZ_SINIRI=200/minute yapın.
+Kota notları:
+  - Sunucunun kendi sınırı varsayılan 20/dk → toplu ölçümde .env'de HIZ_SINIRI=200/minute yapın.
+  - Gemini ücretsiz katmanı dakikada 5 istek kabul eder → --bekle 13 (varsayılan) ile istekler aralıklı
+    gönderilir. Ücretli anahtar veya Ollama kullanıyorsanız --bekle 0 yapın.
+  - 429 gelirse (kota doldu) betik bekleyip aynı prompt'u tekrar dener; bu, geçersiz cevap sayılmaz.
 """
 
 import argparse
@@ -43,6 +47,7 @@ def main() -> None:
     ap.add_argument("--set", type=Path, default=KOK / "data/test_prompts/test_prompts_v0.jsonl")
     ap.add_argument("--limit", type=int, default=20)
     ap.add_argument("--url", default="http://localhost:8000")
+    ap.add_argument("--bekle", type=float, default=13, help="istekler arası saniye (ücretsiz Gemini: 13)")
     args = ap.parse_args()
 
     promptlar = [json.loads(s) for s in args.set.read_text(encoding="utf-8").splitlines() if s.strip()]
@@ -52,6 +57,8 @@ def main() -> None:
     with httpx.Client(base_url=args.url, timeout=60) as istemci:
         surum = istemci.get("/health").json()["meta_prompt"]
         for i, tp in enumerate(promptlar, 1):
+            if i > 1:
+                time.sleep(args.bekle)
             # 429 = sunucunun hız sınırı doldu. Bu bir meta-prompt hatası değil; bekleyip tekrar dene.
             for _ in range(10):
                 t0 = time.perf_counter()
@@ -59,8 +66,8 @@ def main() -> None:
                 sure = (time.perf_counter() - t0) * 1000
                 if r.status_code != 429:
                     break
-                print("  hız sınırı (429), 10 sn bekleniyor...")
-                time.sleep(10)
+                print("  kota/hız sınırı (429), 20 sn bekleniyor...")
+                time.sleep(20)
             govde = r.json()
             gecerli = r.status_code == 200
             satirlar.append({
