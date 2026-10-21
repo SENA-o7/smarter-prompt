@@ -228,7 +228,32 @@ sürüyordu. **Süreyi belirleyen, Google'ın o anki yükü.** Ücretsiz katmand
 6. Meta-prompt v1: "Önce soru" stratejisi için "prompt'u kullanıcının ağzından yaz" kuralı + görev türüne göre
    ipuçları → `META_PROMPT_SURUMU = "v1"` → `docs/kararlar/0003-meta-prompt-v1.md` → v0 ile karşılaştır.
 
+7. **Boşluk doldurma özelliği** (tarayıcı testinden sonra): aşağıdaki "Eklenecekler" bölümü ve karar 0004.
+
 **8. hafta:**
-7. Hocaya danış → katılımcı listesi → sunucuyu internete taşı → `docs/kullanici-calismasi/README.md`'deki adımlar.
+8. Hocaya danış → katılımcı listesi → sunucuyu internete taşı → `docs/kullanici-calismasi/README.md`'deki adımlar.
 
 **Her cuma:** `docs/gunluk/hafta-NN-isim.md` (şablon: `docs/gunluk/_sablon.md`) — raporun 7. bölümü buradan çıkacak.
+
+---
+
+## Eklenecekler: boşluk doldurma (önerildi, sıradaki özellik)
+
+**Fikir (Sena):** Önerilen prompt'larda `[hedef kitle]`, `[programlama dili]` gibi köşeli parantezli boşluklar var.
+Kullanıcı bunları doldurmadan gönderirse geliştirmenin faydası azalır. Şu an **Kullan**'a basınca metin yazı kutusuna
+**düzenlenebilir** şekilde yazılıyor (gönderilmiyor), ama boşlukları doldurması gerektiğini hissettiren hiçbir şey yok.
+
+**Neden "gönderdikten sonra sor" değil?** Mesaj gitmiş olur, eklenti onu değiştiremez; ikinci bir mesaj gerekir.
+Bu yüzden uyarı **göndermeden önce** verilmeli.
+
+**Plan (3 katman):**
+1. **Kartta görünür kıl:** boşluklar renkli vurgulu + "✏️ 2 boşluk doldurulacak" rozeti.
+2. **Kullan'a basınca mini form:** her boşluk için bir kutu → [Doldur ve kutuya yaz] / [Boşlukları bırak]
+   ("Önce soru" stratejisinde boşluklar bilerek bırakılır, o yüzden bırakma seçeneği şart).
+3. **Göndermeden önce yumuşak uyarı:** kutuda hâlâ `[...]` varsa üstte şerit: "⚠️ 1 boşluk doldurulmadı [Göster]".
+   Gönderimi engellemez. Tarayıcı testinden sonra.
+
+**Araştırma bonusu:** Anonim kayda `bosluk_sayisi` ve `doldurulan_bosluk` sayıları (metin değil) → raporda
+"kullanıcılar boşlukların %X'ini doldurdu" bulgusu.
+
+Ayrıntılı tasarım, hangi dosyanın nasıl değişeceği ve ön koşullar: [docs/kararlar/0004-bosluk-doldurma.md](docs/kararlar/0004-bosluk-doldurma.md)

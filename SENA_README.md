@@ -343,4 +343,25 @@ Kodla yapılamayan, hafta 1-4'ten kalan işler:
 - **K3 (veri):** WildChat betikleriyle test setini 200'e çıkar (`test_prompts_v2.jsonl`), hakem değerlendirme
   betiği `eval/judge.py` (sıra değiştirmeli A-B / B-A).
 
+## Eklenecekler: boşluk doldurma (önerildi, sıradaki özellik)
+
+**Fikir (Sena):** Önerilen prompt'larda `[hedef kitle]`, `[programlama dili]` gibi köşeli parantezli boşluklar var.
+Kullanıcı bunları doldurmadan gönderirse geliştirmenin faydası azalır. Şu an **Kullan**'a basınca metin yazı kutusuna
+**düzenlenebilir** şekilde yazılıyor (gönderilmiyor), ama boşlukları doldurması gerektiğini hissettiren hiçbir şey yok.
+
+**Neden "gönderdikten sonra sor" değil?** Mesaj gitmiş olur, eklenti onu değiştiremez; ikinci bir mesaj gerekir.
+Bu yüzden uyarı **göndermeden önce** verilmeli.
+
+**Plan (3 katman):**
+1. **Kartta görünür kıl:** boşluklar renkli vurgulu + "✏️ 2 boşluk doldurulacak" rozeti.
+2. **Kullan'a basınca mini form:** her boşluk için bir kutu → [Doldur ve kutuya yaz] / [Boşlukları bırak]
+   ("Önce soru" stratejisinde boşluklar bilerek bırakılır, o yüzden bırakma seçeneği şart).
+3. **Göndermeden önce yumuşak uyarı:** kutuda hâlâ `[...]` varsa üstte şerit: "⚠️ 1 boşluk doldurulmadı [Göster]".
+   Gönderimi engellemez. Tarayıcı testinden sonra.
+
+**Araştırma bonusu:** Anonim kayda `bosluk_sayisi` ve `doldurulan_bosluk` sayıları (metin değil) → raporda
+"kullanıcılar boşlukların %X'ini doldurdu" bulgusu.
+
+Ayrıntılı tasarım, hangi dosyanın nasıl değişeceği ve ön koşullar: [docs/kararlar/0004-bosluk-doldurma.md](docs/kararlar/0004-bosluk-doldurma.md)
+
 Kolay gelsin! — Sena

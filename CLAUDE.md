@@ -71,6 +71,7 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - Ayrıntılı gözlemler: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`, `ZEYNEP_README.md`.
 
 ### Bitti
+- [x] Eklenti son kodla derlendi (`extension/.output/chrome-mv3`); kurulum ve deneme adımları kullanıcıya anlatıldı
 - [x] Hafta 1-4: iskelet, CI, sunucu, ChatGPT eklentisi, test seti v0/v1, veri betikleri, ölçüm, promptfoo (bkz. SENA_README)
 - [x] Hafta 5-6: Claude + Gemini adaptörleri, ortak Panel, ayarlar sayfası (dil, mod, onay), meta-prompt v1, model değişikliği
 - [x] Hafta 7: `/event` anonim seçim kaydı (prompt metni yok, fazladan alan reddedilir), "düzenlendi" takibi, `eval/judge.py`
@@ -79,6 +80,8 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [x] Testler: sunucu 14/14, eklenti 9/9, tip kontrolü + derleme temiz
 
 ### Denenmedi / yapılacak (öncelik sırasıyla)
+- [ ] **Boşluk doldurma (önerildi, sıradaki özellik):** `[hedef kitle]` gibi boşluklar kartta vurgulansın + Kullan'da
+      doldurma formu + göndermeden önce yumuşak uyarı → `docs/kararlar/0004-bosluk-doldurma.md`. Ön koşul: tarayıcı testi
 - [ ] **Tarayıcı testi:** `npm run dev` → chatgpt.com, claude.ai, gemini.google.com → Geliştir → Kullan → Gönder. Seçici kırıksa `extension/adapters/<site>.ts`
 - [ ] Ayarlar sayfası, seçim kaydı (`server/veri/olaylar.jsonl`), Gemini Nano modu tarayıcıda
 - [ ] Repo: arkadaşları **collaborator** ekle (Settings → Collaborators); dal koruması; `GEMINI_API_KEY` secret
@@ -88,3 +91,21 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [ ] Hafta 8: hocaya danış (etik), sunucuyu internete taşı (Render/HF Spaces), 12-15 katılımcı
 - [ ] Hafta 10: rapor (`docs/rapor/`), sunum, demo videosu, `v1.0.0`
 - [ ] Gemini API anahtarı sohbete yapıştırıldı → test bitince AI Studio'dan yenile
+
+## Fikirler ve öneriler (herkes ekleyebilir)
+
+Aklına bir fikir, sorun ya da soru gelirse buraya **en alta** bir satır ekle ve PR ile gönder. Büyük bir fikirse
+`docs/kararlar/NNNN-kisa-ad.md` dosyası aç (durum: önerildi) ve buradan bağlantı ver. Ekipçe konuşulup karar
+verilince durumu güncelle. Claude Code kullanıyorsan "CLAUDE.md'deki fikirlere şunu ekle: ..." demen yeterli.
+
+Biçim: `- [durum] Fikir — Öneren (tarih) — bağlantı`
+Durumlar: 💡 önerildi · 🗣️ tartışılıyor · ✅ kabul edildi (yapılacaklara taşındı) · ❌ reddedildi (nedeniyle)
+
+- ✅ Boşlukları gönderdikten sonra değil, **göndermeden önce** doldurt: kartta vurgula + Kullan'da mini form +
+  yumuşak uyarı; doldurma oranını anonim ölç — Sena (21.10.2026) — [0004](docs/kararlar/0004-bosluk-doldurma.md)
+- ❌ Gönderdikten sonra eklentinin "hedef kitleyi girin" diye sorması — Sena (21.10.2026) — mesaj gitmiş olur,
+  ikinci mesaj gerekir; yerine yukarıdaki çözüm seçildi
+- 💡 Süre hedefi (< 4 sn) ücretsiz katmanda tutmuyor: daha kısa meta-prompt, akış (streaming) ile kartları tek tek
+  göstermek veya ücretli katman — Claude (21.10.2026)
+- 💡 Hakem değerlendirmesi için farklı aileden ücretsiz bir model bulmak (OpenAI / Anthropic / Ollama yerel) — Claude (21.10.2026)
+<!-- Yeni fikirleri bu satırın üstüne ekleyin -->
