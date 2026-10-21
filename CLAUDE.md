@@ -12,18 +12,18 @@ ChatGPT / Claude / Gemini'ye tarayıcı eklentisi olarak entegre olan prompt gel
 prompt'unu anlamını değiştirmeden 5 stratejiyle (net, detayli, adim_adim, format, soru) yeniden yazar,
 her birine "neden daha iyi" açıklaması ekler, seçimi kullanıcıya bırakır. Türkçe odaklı; etkisi LLM hakem
 ve kullanıcı çalışmasıyla ölçülecek. 3 kişilik ders projesi, 10 haftalık plan.
-Kaynak rehberler: `D:\D_SenaOz\AI projesi\*.pdf` (repoda değil). Ayrıntılı anlatım: [SENA_README.md](SENA_README.md).
+Kaynak rehberler: `D:\D_SenaOz\AI projesi\*.pdf` (repoda değil). Ayrıntılı anlatım: [SENA_README.md](SENA_README.md) (hafta 1-4), [ZEYNEP_README.md](ZEYNEP_README.md) (hafta 5-9).
 
 ## Yapı
 
 | Klasör | Ne | Sorumlu |
 |---|---|---|
-| `extension/` | WXT + TypeScript eklenti. `entrypoints/background.ts` (sunucuya istek, önbellek, kısayol), `entrypoints/content/` (buton + Shadow DOM panel), `adapters/` (site başına yazı kutusu erişimi), `lib/schema.ts` (Zod sözleşmesi) | K1 |
-| `server/` | FastAPI. `app/main.py` (/health, /enhance, hız sınırı, yeniden deneme), `app/meta_prompt.py` (meta-prompt + ayrıştırma), `app/schemas.py` (Pydantic sözleşmesi), `app/providers.py` (LiteLLM) | K2 |
-| `eval/` | `meta_prompt_testi.py` (geçerlilik/gecikme ölçümü), `promptfoo/` (regresyon testleri) | K3 |
+| `extension/` | WXT + TypeScript eklenti. `entrypoints/background.ts` (bulut/yerel mod, önbellek, seçim kaydı, kısayol), `entrypoints/content/` (adaptör seçimi + Shadow DOM), `entrypoints/options/` (ayarlar sayfası), `components/Panel.ts` (buton + 5 kart + düzenlendi takibi), `adapters/` (chatgpt, claude, gemini), `lib/` (schema, ayarlar, yerel_model, meta_prompt kopyası) | K1 |
+| `server/` | FastAPI. `app/main.py` (/health, /enhance, /event, hız sınırı, kota→429, geçici hatada tekrar), `app/meta_prompt.py` (meta-prompt v0 ve v1 + ayrıştırma), `app/schemas.py` (Pydantic sözleşmesi), `app/providers.py` (LiteLLM) | K2 |
+| `eval/` | `meta_prompt_testi.py` (geçerlilik/gecikme), `judge.py` (LLM hakem, sıra değiştirmeli), `analiz.py` (binom, ki-kare, grafikler), `kullanici_calismasi.py` (seçim + SUS), `promptfoo/` | K3 |
 | `data/` | `test_prompts/*.jsonl` test setleri, `README.md` veri kartı; `raw/` git'e girmez | K3 |
 | `scripts/data/` | WildChat indirme → filtreleme → etiketleme | K3 |
-| `docs/` | `arastirma/` (makale notları, rakipler), `kararlar/` (ADR), `gunluk/` (haftalık), `rapor/` | Hepsi |
+| `docs/` | `arastirma/` (makale notları, rakipler), `kararlar/` (ADR 0001-0003), `kullanici-calismasi/` (onam, SUS, görevler, görüşme), `gunluk/` (haftalık), `rapor/` | Hepsi |
 
 ## Komutlar
 
@@ -57,29 +57,33 @@ npx promptfoo@latest eval -c eval/promptfoo/promptfooconfig.yaml
 
 ## Durum / Nerede kaldık
 
-**Son güncelleme: 21.10.2026 — Sena (Claude Code ile)**
+**Son güncelleme: 21.10.2026 akşam — Sena (Claude Code ile)**
 
-### Bitti (hafta 1-4 kod tarafı)
-- [x] Repo iskeleti, `.gitignore`, `.env.example`, LICENSE, PR/issue şablonları, CODEOWNERS taslağı
-- [x] CI: eklenti (typecheck, vitest, zip) + sunucu (ruff, pytest) — `.github/workflows/ci.yml`
-- [x] Meta-prompt testi iş akışı (gerçek model, elle/haftalık) — `.github/workflows/meta-prompt.yml`
-- [x] Release iş akışı (`v*` etiketi → zip Release'e) — `.github/workflows/release.yml`
-- [x] Sunucu: `/enhance`, Pydantic şema, bozuk JSON'da 1 yeniden deneme (502), model hatasında 503, hız sınırı (429), CORS — 9 test
-- [x] Eklenti: ChatGPT adaptörü, ✨ Geliştir butonu, Ctrl+Shift+E, 5 kartlı panel (Shadow DOM, açık/koyu tema), Kullan / Geri al, önbellek — 3 test
-- [x] Test seti v0 (20) ve v1 (100) — `data/test_prompts/`
-- [x] Veri betikleri: `indir_wildchat.py`, `filtrele_turkce.py`, `etiketle.py`
-- [x] Ölçüm: `eval/meta_prompt_testi.py`, `eval/promptfoo/`
-- [x] Docs: araştırma soruları, okuma listesi + şablon, rakip tablosu, repo notları, günlük şablonu, karar 0001-0002
+### Şu an neredeyiz?
+Kod tarafında **hafta 1-9 yazıldı**. Hafta 1-4 tarayıcı dışında doğrulandı; 5-9'un kodu otomatik testlerden geçiyor
+ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıcı testi, kullanıcı çalışması, rapor).
 
-### Elle yapılması gereken (kod dışı, hafta 1-4'ten kalan)
-- [ ] **Gerçek API anahtarıyla deneme:** `server/.env` doldur → sunucu → `python eval/meta_prompt_testi.py` → sonucu `docs/gunluk/`'e yaz
-- [ ] **ChatGPT'de tarayıcı testi:** `npm run dev` → chatgpt.com → Geliştir → Kullan → Gönder; seçici kırıksa `extension/adapters/chatgpt.ts`
-- [ ] GitHub ayarları: `main`/`develop` dal koruması, Projects panosu, `GEMINI_API_KEY` secret, CODEOWNERS'a kullanıcı adları
-- [ ] Makale okuma notları (`docs/arastirma/makaleler/`), rakip analizi (`docs/arastirma/rakipler/`)
-- [ ] Test seti v1'i ekip gözden geçirsin (prompt'lar Claude ile taslak yazıldı); 30 prompt'u iki kişi bağımsız etiketlesin
-- [ ] Yukarıdakiler tamamsa: `develop` → `main` PR, `v0.1.0` etiketi
+### Gerçek model testi (21.10.2026)
+- Model: `gemini/gemini-3.5-flash-lite` (`gemini-2.5-flash`'ın ücretsiz kotası günde 20 istek; bugün doldu).
+- Meta-prompt v0, 10 prompt: şema %100, görev türü uyumu %100, **medyan 5.3 sn** (hedef < 4 sn ❌).
+  CSV: `eval/results/meta_prompt_v0_20261021-1519.csv`. v1 sonucu: `eval/results/meta_prompt_v1_*.csv`.
+- Ayrıntılı gözlemler: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`, `ZEYNEP_README.md`.
 
-### Sıradaki (hafta 5-6)
-- [ ] K1: Claude ve Gemini adaptörleri (`extension/adapters/claude.ts`, `gemini.ts`), içerik betiğinde siteye göre adaptör seçimi, ayarlar sayfası, Playwright testi
-- [ ] K2: Görev türüne göre strateji içerikleri, meta-prompt v1 (+ `docs/kararlar/0003-...`)
-- [ ] K3: Test seti 200'e (WildChat betikleriyle), hakem değerlendirme betiği `eval/judge.py`
+### Bitti
+- [x] Hafta 1-4: iskelet, CI, sunucu, ChatGPT eklentisi, test seti v0/v1, veri betikleri, ölçüm, promptfoo (bkz. SENA_README)
+- [x] Hafta 5-6: Claude + Gemini adaptörleri, ortak Panel, ayarlar sayfası (dil, mod, onay), meta-prompt v1, model değişikliği
+- [x] Hafta 7: `/event` anonim seçim kaydı (prompt metni yok, fazladan alan reddedilir), "düzenlendi" takibi, `eval/judge.py`
+- [x] Hafta 8: `docs/kullanici-calismasi/` (onam formu, kurulum, 5 görev, SUS, görüşme rehberi)
+- [x] Hafta 9: `eval/analiz.py`, `eval/kullanici_calismasi.py` (sahte veriyle doğrulandı), Gemini Nano yerel mod (deneysel)
+- [x] Testler: sunucu 14/14, eklenti 9/9, tip kontrolü + derleme temiz
+
+### Denenmedi / yapılacak (öncelik sırasıyla)
+- [ ] **Tarayıcı testi:** `npm run dev` → chatgpt.com, claude.ai, gemini.google.com → Geliştir → Kullan → Gönder. Seçici kırıksa `extension/adapters/<site>.ts`
+- [ ] Ayarlar sayfası, seçim kaydı (`server/veri/olaylar.jsonl`), Gemini Nano modu tarayıcıda
+- [ ] Repo: arkadaşları **collaborator** ekle (Settings → Collaborators); dal koruması; `GEMINI_API_KEY` secret
+- [ ] Hakem için farklı aileden anahtar (ör. `OPENAI_API_KEY`) → `python eval/judge.py --limit 10`
+- [ ] Test seti v2 (200) — WildChat betikleri; v1'deki 100 prompt'u ekip gözden geçirsin
+- [ ] Süre hedefi (< 4 sn) tutmuyor: daha hızlı model / daha kısa meta-prompt dene
+- [ ] Hafta 8: hocaya danış (etik), sunucuyu internete taşı (Render/HF Spaces), 12-15 katılımcı
+- [ ] Hafta 10: rapor (`docs/rapor/`), sunum, demo videosu, `v1.0.0`
+- [ ] Gemini API anahtarı sohbete yapıştırıldı → test bitince AI Studio'dan yenile

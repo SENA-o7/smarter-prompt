@@ -18,9 +18,11 @@ her seçeneğin neden daha iyi olduğunu açıklar ve seçimi kullanıcıya bır
 
 ## Durum
 
-Hafta 1-4 (MVP) kodu hazır: sunucu `/enhance` uç noktası, ChatGPT eklentisi (gerçek tarayıcı testi bekliyor), 100 prompt'luk test seti,
-ölçüm betikleri ve CI. Ayrıntılar: [SENA_README.md](SENA_README.md) · Nerede kaldık: [CLAUDE.md](CLAUDE.md).
-Sırada: Claude/Gemini adaptörleri, ayarlar sayfası, hakem değerlendirmesi (hafta 5-7).
+- **Hafta 1-4** (MVP): sunucu, ChatGPT eklentisi, test seti, ölçüm, CI → [SENA_README.md](SENA_README.md)
+- **Hafta 5-9**: Claude + Gemini desteği, ayarlar, anonim seçim kaydı, hakem değerlendirmesi, kullanıcı çalışması
+  materyalleri, analiz betikleri, Gemini Nano yerel mod → [ZEYNEP_README.md](ZEYNEP_README.md)
+- **Gerçek model testi** (`gemini-3.5-flash-lite`, 10 prompt): geçerli cevap %100, görev türü uyumu %100, medyan 5.3 sn.
+- **Henüz tarayıcıda denenmedi.** Nerede kaldık ve sıradaki işler: [CLAUDE.md](CLAUDE.md)
 
 ## Repo yapısı
 
@@ -57,6 +59,8 @@ cd extension
 npm install
 npm run dev        # Chrome açılır, eklenti yüklü gelir; kod değişince yenilenir
 ```
+
+Ayarlar: eklenti simgesine sağ tık → **Seçenekler** (dil, bulut/yerel mod, araştırma onayı).
 
 Elle yüklemek için: `npm run build` → `chrome://extensions` → Geliştirici modu → **Paketlenmemiş öğe yükle** → `extension/.output/chrome-mv3`.
 

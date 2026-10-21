@@ -4,6 +4,7 @@ Bu belge, projenin ilk 4 haftalık kod tarafını adım adım anlatır. Ekip ark
 klonlayıp **10 dakikada çalıştırabilmesi** ve her dosyanın ne işe yaradığını anlaması için yazıldı.
 
 > Kısa durum özeti ve yapılacaklar listesi için: [CLAUDE.md](CLAUDE.md) → "Durum / Nerede kaldık"
+> Hafta 5-9 (Claude/Gemini, ayarlar, hakem değerlendirmesi, kullanıcı çalışması) için: [ZEYNEP_README.md](ZEYNEP_README.md)
 
 ---
 
@@ -78,7 +79,7 @@ izinleriyle çalışır.
     { "strateji": "net", "baslik": "Net ve kısa", "prompt": "...", "neden": "..." },
     "... toplam TAM 5 tane, her strateji bir kez ..."
   ],
-  "model": "gemini/gemini-2.5-flash",
+  "model": "gemini/gemini-3.5-flash-lite",
   "meta_prompt_surumu": "v0",
   "sure_ms": 1840
 }
@@ -120,9 +121,13 @@ copy ..\.env.example .env              # Windows   (macOS/Linux: cp ../.env.exam
 Şimdi `server/.env` dosyasını aç ve anahtarını yaz:
 
 ```
-MODEL=gemini/gemini-2.5-flash
+MODEL=gemini/gemini-3.5-flash-lite
 GEMINI_API_KEY=buraya-kendi-anahtarin
 ```
+
+> **Ücretsiz kota uyarısı (gerçek testte öğrendik):** `gemini-2.5-flash` ücretsiz katmanda **günde yalnızca
+> 20 istek** kabul ediyor. Bu yüzden varsayılan model `gemini-3.5-flash-lite`. Anahtarının erişebildiği modelleri
+> görmek için: https://aistudio.google.com → model listesi.
 
 Ollama kullanacaksan: `ollama pull llama3.1` yap ve `.env`'de `MODEL=ollama/llama3.1` yaz (anahtar gerekmez).
 
