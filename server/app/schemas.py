@@ -59,6 +59,24 @@ class EnhanceRequest(BaseModel):
     site: Literal["chatgpt", "claude", "gemini", "diger"] = "diger"  # istatistik için
 
 
+class SecimOlayi(BaseModel):
+    """POST /event: kullanıcı çalışması için anonim seçim kaydı (AS3).
+
+    Bilerek PROMPT METNİ İÇERMEZ. extra="forbid": eklenti yanlışlıkla fazladan bir alan
+    (ör. metin) gönderirse kayıt reddedilir; kişisel veri hiçbir şekilde diske yazılmaz.
+    """
+
+    model_config = {"extra": "forbid"}
+
+    oturum_id: str = Field(min_length=8, max_length=64)  # rastgele katılımcı kimliği
+    site: Literal["chatgpt", "claude", "gemini", "diger"]
+    strateji: Strateji
+    gorev_turu: GorevTuru
+    duzenlendi: bool  # seçilen prompt göndermeden önce değiştirildi mi
+    secim_suresi_ms: int = Field(ge=0, le=3_600_000)
+    meta_prompt_surumu: str = Field(max_length=16)
+
+
 class EnhanceResponse(GelistirmeSonucu):
     """/enhance cevabı = model çıktısı + ölçüm bilgileri."""
 

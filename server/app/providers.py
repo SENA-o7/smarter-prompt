@@ -12,6 +12,8 @@ MODEL değişkenini değiştirmek yeterli. Örnekler:
 
 from typing import Protocol
 
+from . import config
+
 
 class LLM(Protocol):
     """Model fonksiyonunun "şekli": mesaj listesi ve model adı alır, metin döndürür.
@@ -32,6 +34,9 @@ async def litellm_tamamla(mesajlar: list[dict[str, str]], model: str) -> str:
         messages=mesajlar,
         temperature=0.7,  # biraz çeşitlilik: 5 seçenek birbirine çok benzemesin
         response_format={"type": "json_object"},  # destekleyen modellere "sadece JSON üret" der
+        # Gemini 2.5 varsayılan olarak cevaptan önce "düşünür"; ilk gerçek testte bu 10-37 sn sürdü.
+        # Prompt yeniden yazmak için düşünmeye gerek yok → kapatıyoruz (.env'de DUSUNME ile değişir).
+        reasoning_effort=config.DUSUNME,
         drop_params=True,  # desteklemeyen sağlayıcılarda response_format sessizce atlanır
         timeout=30,  # 30 sn'de cevap gelmezse hata → main.py 503 döner
     )

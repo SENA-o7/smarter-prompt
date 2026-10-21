@@ -78,7 +78,7 @@ def test_enhance_basarili(client):
     assert r.status_code == 200
     govde = r.json()
     assert len(govde["secenekler"]) == 5
-    assert govde["meta_prompt_surumu"] == "v0"
+    assert govde["meta_prompt_surumu"] in ("v0", "v1")
     assert govde["sure_ms"] >= 0
 
 
@@ -105,6 +105,73 @@ def test_enhance_model_hatasinda_503(client):
     assert r.status_code == 503
 
 
+def test_enhance_saglayici_kotasi_dolunca_429(client):
+    """Gemini ücretsiz katman kotası dolunca 503 değil 429 dönmeli (gerçek testte bulundu)."""
+
+    class KotaHatasi(Exception):
+        status_code = 429  # litellm.RateLimitError da bu alanı taşır
+
+    async def kotasi_dolu(mesajlar, model):
+        raise KotaHatasi("RESOURCE_EXHAUSTED")
+
+    app.dependency_overrides[get_llm] = lambda: kotasi_dolu
+    r = client.post("/enhance", json={"prompt": "bunu özetle"})
+    assert r.status_code == 429
+    assert "kota" in r.json()["detail"]
+
+
+def test_enhance_gecici_hatada_bir_kez_daha_dener(client, monkeypatch):
+    """Gemini "model şu an yoğun" (503) derse bir kez daha denenmeli (gerçek testte görüldü)."""
+    monkeypatch.setattr("app.main.GECICI_HATA_BEKLEME_SN", 0)
+
+    class YogunHata(Exception):
+        status_code = 503
+
+    cagri = {"n": 0}
+
+    async def ilki_yogun(mesajlar, model):
+        cagri["n"] += 1
+        if cagri["n"] == 1:
+            raise YogunHata("high demand")
+        return json.dumps(GECERLI)
+
+    app.dependency_overrides[get_llm] = lambda: ilki_yogun
+    r = client.post("/enhance", json={"prompt": "bunu özetle"})
+    assert r.status_code == 200
+    assert cagri["n"] == 2
+
+
+# --- /event uç noktası ------------------------------------------------------
+
+OLAY = {
+    "oturum_id": "abcd1234-ef",
+    "site": "chatgpt",
+    "strateji": "detayli",
+    "gorev_turu": "kod",
+    "duzenlendi": False,
+    "secim_suresi_ms": 4200,
+    "meta_prompt_surumu": "v1",
+}
+
+
+def test_event_dosyaya_yazar(client, tmp_path, monkeypatch):
+    dosya = tmp_path / "olaylar.jsonl"
+    monkeypatch.setattr("app.config.OLAY_DOSYASI", str(dosya))
+    r = client.post("/event", json=OLAY)
+    assert r.status_code == 204
+    satir = json.loads(dosya.read_text(encoding="utf-8"))
+    assert satir["strateji"] == "detayli" and "zaman" in satir
+
+
+def test_event_prompt_metnini_reddeder(client, tmp_path, monkeypatch):
+    """Gizlilik: eklenti yanlışlıkla prompt metni gönderirse kayıt reddedilmeli ve diske yazılmamalı."""
+    dosya = tmp_path / "olaylar.jsonl"
+    monkeypatch.setattr("app.config.OLAY_DOSYASI", str(dosya))
+    r = client.post("/event", json={**OLAY, "prompt": "gizli metin"})
+    assert r.status_code == 422
+    assert not dosya.exists()
+
+
 def test_enhance_bos_prompt_reddedilir(client):
     r = client.post("/enhance", json={"prompt": ""})
     assert r.status_code == 422
@@ -114,3 +181,11 @@ def test_health(client):
     r = client.get("/health")
     assert r.status_code == 200
     assert r.json()["durum"] == "ok"
+
+
+def test_meta_prompt_v1_soru_kurali_var():
+    """v1, gerçek testte görülen "soru stratejisi cevap gibi yazılıyor" hatasına karşı kural içermeli."""
+    from app.meta_prompt import META_PROMPTLAR
+
+    assert "kullanıcının ağzından" in META_PROMPTLAR["v1"]
+    assert set(META_PROMPTLAR) == {"v0", "v1"}

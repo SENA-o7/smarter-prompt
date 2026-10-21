@@ -6,14 +6,18 @@ modelin döndürdüğü JSON'u doğrulamak ve 5 seçeneği eklentiye geri vermek
 Uç noktalar:
     GET  /health   → Sunucu ayakta mı, hangi model ve meta-prompt sürümü kullanılıyor?
     POST /enhance  → {"prompt": "bana kod yaz"} alır, 5 geliştirilmiş seçenek döndürür.
+    POST /event    → Kullanıcı çalışması için anonim seçim kaydı (prompt metni YOK).
 
 Çalıştırma:  uvicorn app.main:app --reload --port 8000
 Belgeler:    http://localhost:8000/docs  (FastAPI otomatik üretir, buradan deneyebilirsiniz)
 """
 
+import asyncio
 import json
 import logging
 import time
+from datetime import UTC, datetime
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Request
@@ -26,7 +30,7 @@ from slowapi.util import get_remote_address
 from . import config
 from .meta_prompt import META_PROMPT_SURUMU, ciktiyi_ayristir, mesajlari_olustur
 from .providers import LLM, litellm_tamamla
-from .schemas import EnhanceRequest, EnhanceResponse
+from .schemas import EnhanceRequest, EnhanceResponse, SecimOlayi
 
 log = logging.getLogger("smarter_prompt")
 
@@ -35,7 +39,7 @@ log = logging.getLogger("smarter_prompt")
 # Amaç: kötüye kullanımı ve API faturasının şişmesini önlemek. Sınır aşılırsa 429 döner.
 limiter = Limiter(key_func=get_remote_address)
 
-app = FastAPI(title="Smarter Prompt API", version="0.1.0")
+app = FastAPI(title="Smarter Prompt API", version="0.5.0")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
@@ -50,8 +54,10 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-# Model bozuk JSON döndürürse toplam kaç kez deneriz? 2 = ilk deneme + 1 yeniden deneme.
+# Bozuk JSON veya geçici sağlayıcı hatasında toplam kaç kez deneriz? 2 = ilk deneme + 1 tekrar.
 DENEME_SAYISI = 2
+# Geçici sağlayıcı hatasından (ör. "model şu an yoğun") sonra tekrar denemeden önce bekleme
+GECICI_HATA_BEKLEME_SN = 1.5
 
 
 def get_llm() -> LLM:
@@ -80,19 +86,33 @@ async def enhance(
 
     Akış:
         1. Meta-prompt + kullanıcı prompt'u ile mesaj listesi oluşturulur.
-        2. Model çağrılır.
-        3. Cevap JSON olarak ayrıştırılır ve şemaya göre doğrulanır.
-        4. Bozuksa bir kez daha denenir; yine bozuksa 502 döner.
+        2. Model çağrılır. Geçici hata (yoğunluk, zaman aşımı) olursa bir kez daha denenir.
+        3. Cevap JSON olarak ayrıştırılır ve şemaya göre doğrulanır; bozuksa bir kez daha denenir.
+        4. Hâlâ başarısızsa anlaşılır bir Türkçe hata döner (429 / 502 / 503).
     """
     baslangic = time.perf_counter()
     mesajlar = mesajlari_olustur(govde.prompt, govde.dil)
 
     son_hata: Exception | None = None
     for deneme in range(1, DENEME_SAYISI + 1):
-        # 1) Modeli çağır. Ağ, anahtar veya kota hatası olursa yeniden denemenin anlamı yok → 503.
+        # 1) Modeli çağır.
         try:
             metin = await llm(mesajlar, config.MODEL)
         except Exception as e:
+            durum = getattr(e, "status_code", None)
+            # Sağlayıcının kotası doldu (ör. Gemini ücretsiz katman: dakikada 5 istek).
+            # Bu "model bozuk" değil "biraz bekle" demek → 429. İlk gerçek testte bulundu.
+            if durum == 429:
+                log.warning("Sağlayıcı kotası doldu: %s", type(e).__name__)
+                raise HTTPException(
+                    429, "Model kotası doldu (ücretsiz katman). Yaklaşık bir dakika bekleyip tekrar deneyin."
+                ) from e
+            # Geçici hata (ör. Gemini "model şu an yoğun" 503): kısa bekleyip bir kez daha dene.
+            # Anahtar hatası (401/403) gibi kalıcı hatalarda tekrar denemenin anlamı yok.
+            if durum not in (400, 401, 403, 404) and deneme < DENEME_SAYISI:
+                log.warning("Geçici model hatası (%s), tekrar deneniyor", durum)
+                await asyncio.sleep(GECICI_HATA_BEKLEME_SN)
+                continue
             log.exception("Model çağrısı başarısız")
             raise HTTPException(503, "Model şu an yanıt vermiyor, biraz sonra tekrar deneyin.") from e
 
@@ -116,3 +136,19 @@ async def enhance(
         meta_prompt_surumu=META_PROMPT_SURUMU,
         sure_ms=round((time.perf_counter() - baslangic) * 1000),
     )
+
+
+@app.post("/event", status_code=204)
+@limiter.limit(config.HIZ_SINIRI)
+async def event(request: Request, olay: SecimOlayi) -> None:
+    """Anonim seçim kaydını dosyaya bir satır olarak ekler (kullanıcı çalışması, 7-8. hafta).
+
+    Eklenti bunu YALNIZCA kullanıcı ayarlardan onay verdiyse gönderir. Şema prompt metni
+    içermez ve fazladan alanları reddeder. IP adresi kaydedilmez.
+    Analiz: python eval/kullanici_calismasi.py
+    """
+    dosya = Path(config.OLAY_DOSYASI)
+    dosya.parent.mkdir(parents=True, exist_ok=True)
+    kayit = {"zaman": datetime.now(UTC).isoformat(timespec="seconds"), **olay.model_dump()}
+    with dosya.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(kayit, ensure_ascii=False) + "\n")

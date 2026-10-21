@@ -28,3 +28,6 @@ eval/results/ham/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Sunucunun anonim secim kayitlari (kullanici calismasi ham verisi)
+server/veri/
