@@ -1,0 +1,7 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    // zod'un .d.cts dosyalari icin gerekli
+    "esModuleInterop": true
+  }
+}

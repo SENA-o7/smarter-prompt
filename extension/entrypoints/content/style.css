@@ -1,0 +1,129 @@
+/* Shadow DOM icinde: sitenin CSS'i buraya sizmaz, bizimki de siteye. */
+:host {
+  --sp-bg: #ffffff;
+  --sp-fg: #1f2328;
+  --sp-soluk: #59636e;
+  --sp-kenar: #d1d9e0;
+  --sp-vurgu: #6d28d9;
+  --sp-vurgu-fg: #ffffff;
+  --sp-kart: #f6f8fa;
+  all: initial;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --sp-bg: #1e1f22;
+    --sp-fg: #e6edf3;
+    --sp-soluk: #9198a1;
+    --sp-kenar: #3d444d;
+    --sp-vurgu: #a78bfa;
+    --sp-vurgu-fg: #14111f;
+    --sp-kart: #26282c;
+  }
+}
+
+.sp-ana-buton {
+  position: fixed;
+  right: 20px;
+  bottom: 96px;
+  z-index: 2147483646;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sp-vurgu);
+  color: var(--sp-vurgu-fg);
+  font: 600 14px/1 system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+}
+
+.sp-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 140px;
+  z-index: 2147483647;
+  width: min(440px, calc(100vw - 40px));
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid var(--sp-kenar);
+  border-radius: 12px;
+  background: var(--sp-bg);
+  color: var(--sp-fg);
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+}
+
+.sp-panel[hidden],
+.sp-ikincil[hidden] {
+  display: none;
+}
+
+.sp-ust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-ust strong {
+  flex: 1;
+}
+
+.sp-ikincil {
+  padding: 4px 8px;
+  border: 1px solid var(--sp-kenar);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--sp-fg);
+  cursor: pointer;
+}
+
+.sp-durum {
+  margin: 8px 0;
+  color: var(--sp-soluk);
+  font-size: 12px;
+}
+
+.sp-liste {
+  display: grid;
+  gap: 8px;
+}
+
+.sp-kart {
+  padding: 10px;
+  border: 1px solid var(--sp-kenar);
+  border-radius: 8px;
+  background: var(--sp-kart);
+}
+
+.sp-kart-ust {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sp-kart h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.sp-sec {
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--sp-vurgu);
+  color: var(--sp-vurgu-fg);
+  cursor: pointer;
+}
+
+.sp-prompt {
+  margin: 8px 0 4px;
+  white-space: pre-wrap;
+}
+
+.sp-neden {
+  margin: 0;
+  color: var(--sp-soluk);
+  font-size: 12px;
+}
