@@ -1,0 +1,3 @@
+# Veri betikleri (scripts/data/) ve değerlendirme betikleri (eval/) için
+datasets>=2.20
+httpx>=0.27

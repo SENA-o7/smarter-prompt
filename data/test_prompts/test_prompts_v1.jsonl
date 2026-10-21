@@ -1,0 +1,100 @@
+{"id": "tp-0001", "prompt": "bana kod yaz", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0002", "prompt": "bunu özetle", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": "metin yok"}
+{"id": "tp-0003", "prompt": "python'da liste nasıl sıralanır", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0004", "prompt": "hocama mail yaz ödevi geç teslim edicem", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0005", "prompt": "bir kedi resmi çiz", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0006", "prompt": "bu hatayı düzelt", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": "hata metni yok"}
+{"id": "tp-0007", "prompt": "enflasyon neden artıyor", "gorev_turu": "analiz", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0008", "prompt": "cv'mi daha iyi yap", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0009", "prompt": "react ile todo uygulaması", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0010", "prompt": "iphone mu samsung mu", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0011", "prompt": "instagram için açıklama yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0012", "prompt": "sql sorgusu yaz müşterileri getir", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0013", "prompt": "bana diyet listesi hazırla", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0014", "prompt": "bu tabloyu yorumla", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": "tablo yok"}
+{"id": "tp-0015", "prompt": "logo tasarla", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0016", "prompt": "ingilizce öğrenmek için plan", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0017", "prompt": "yapay zeka hakkında makale yaz 500 kelime", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0018", "prompt": "write a function to reverse a string", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": "İngilizce kontrol"}
+{"id": "tp-0019", "prompt": "anket sonuçlarını analiz et", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0020", "prompt": "doğum günü mesajı", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0021", "prompt": "excel'de iki sütunu birleştirme formülü", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0022", "prompt": "javascript'te butona tıklayınca renk değişsin", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0023", "prompt": "web sitesi yap", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0024", "prompt": "bu kodu açıkla", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0025", "prompt": "python ile hava durumu uygulaması", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0026", "prompt": "kodumu optimize et", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0027", "prompt": "flutter'da login ekranı", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0028", "prompt": "c dilinde bağlı liste", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0029", "prompt": "regex ile e-posta doğrulama", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0030", "prompt": "git'te son commiti nasıl geri alırım", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0031", "prompt": "veritabanı tasarla", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0032", "prompt": "api nasıl yazılır", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0033", "prompt": "java ödevim var yardım et", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0034", "prompt": "python'da dosyadan satır satır okuma", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0035", "prompt": "unit test yaz", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0036", "prompt": "bu fonksiyona yorum satırı ekle", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0037", "prompt": "dilekçe yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0038", "prompt": "arkadaşıma özür mesajı", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0039", "prompt": "bu metni düzelt", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0040", "prompt": "şiir yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0041", "prompt": "staj başvurusu için ön yazı", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0042", "prompt": "linkedin gönderisi yaz yeni işe başladım", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0043", "prompt": "bu paragrafı ingilizceye çevir", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0044", "prompt": "hikaye yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0045", "prompt": "ürün açıklaması yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0046", "prompt": "tez özetimi kısalt", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0047", "prompt": "kompozisyon yaz çevre kirliliği", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0048", "prompt": "müşteriye şikayet cevabı", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0049", "prompt": "sunum için giriş cümlesi", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0050", "prompt": "bunu daha resmi yap", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0051", "prompt": "blog yazısı yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0052", "prompt": "toplantı notlarını düzenle", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0053", "prompt": "ev sahibine kira artışı hakkında mesaj", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0054", "prompt": "bu iki makaleyi karşılaştır", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0055", "prompt": "bitcoin alınır mı", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0056", "prompt": "şirketimin swot analizini yap", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0057", "prompt": "bu verideki trendi bul", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0058", "prompt": "python mu java mı öğrenmeliyim", "gorev_turu": "analiz", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0059", "prompt": "kira mı ev almak mı mantıklı", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0060", "prompt": "bu sözleşmede risk var mı", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0061", "prompt": "türkiye'de işsizliğin nedenleri", "gorev_turu": "analiz", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0062", "prompt": "bu reklam neden tutmadı", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0063", "prompt": "rakiplerimi analiz et", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0064", "prompt": "hangi laptop alayım", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0065", "prompt": "bu grafiği açıkla", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0066", "prompt": "öğrenci memnuniyet anketini değerlendir", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0067", "prompt": "yapay zeka işleri elimizden alacak mı", "gorev_turu": "analiz", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0068", "prompt": "bu iş planının zayıf yanları", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0069", "prompt": "deprem riskini değerlendir", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0070", "prompt": "manzara resmi", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0071", "prompt": "doğum günü davetiyesi tasarla", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0072", "prompt": "instagram için kapak görseli", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0073", "prompt": "anime tarzı kız karakter çiz", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0074", "prompt": "kahve dükkanı için afiş", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0075", "prompt": "çocuk kitabı için illüstrasyon", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0076", "prompt": "sunum için arka plan", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0077", "prompt": "fütüristik şehir çiz", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0078", "prompt": "profil fotoğrafımı karikatüre çevir", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0079", "prompt": "youtube thumbnail", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0080", "prompt": "ürün fotoğrafı beyaz arka plan", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0081", "prompt": "bir ejderha resmi", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0082", "prompt": "düğün davetiyesi tasarımı", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0083", "prompt": "minimalist duvar posteri", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0084", "prompt": "bugün ne pişireyim", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0085", "prompt": "spor programı hazırla", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0086", "prompt": "tatil planı yap", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0087", "prompt": "sınava nasıl çalışayım", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0088", "prompt": "bana bir isim öner", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0089", "prompt": "hediye fikri", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0090", "prompt": "mülakat soruları sor bana", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0091", "prompt": "kpss için çalışma takvimi", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0092", "prompt": "stresle nasıl başa çıkarım", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0093", "prompt": "kitap öner", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0094", "prompt": "matematik sorusu çöz", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0095", "prompt": "ingilizce konuşma pratiği yapalım", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0096", "prompt": "evde yapılabilecek hobiler", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0097", "prompt": "bana fizik konusu anlat", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0098", "prompt": "bütçe planı yap aylık 30 bin maaş", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0099", "prompt": "düğün için şarkı listesi", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0100", "prompt": "bana bir oyun öner arkadaşlarla oynamak için", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}

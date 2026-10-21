@@ -1,0 +1,20 @@
+{"id": "tp-0001", "prompt": "bana kod yaz", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0002", "prompt": "bunu özetle", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": "metin yok"}
+{"id": "tp-0003", "prompt": "python'da liste nasıl sıralanır", "gorev_turu": "kod", "belirsizlik": "dusuk", "kaynak": "ekip", "not": ""}
+{"id": "tp-0004", "prompt": "hocama mail yaz ödevi geç teslim edicem", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0005", "prompt": "bir kedi resmi çiz", "gorev_turu": "gorsel", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0006", "prompt": "bu hatayı düzelt", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": "hata metni yok"}
+{"id": "tp-0007", "prompt": "enflasyon neden artıyor", "gorev_turu": "analiz", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0008", "prompt": "cv'mi daha iyi yap", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0009", "prompt": "react ile todo uygulaması", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0010", "prompt": "iphone mu samsung mu", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0011", "prompt": "instagram için açıklama yaz", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0012", "prompt": "sql sorgusu yaz müşterileri getir", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0013", "prompt": "bana diyet listesi hazırla", "gorev_turu": "diger", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0014", "prompt": "bu tabloyu yorumla", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": "tablo yok"}
+{"id": "tp-0015", "prompt": "logo tasarla", "gorev_turu": "gorsel", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0016", "prompt": "ingilizce öğrenmek için plan", "gorev_turu": "diger", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0017", "prompt": "yapay zeka hakkında makale yaz 500 kelime", "gorev_turu": "yazi", "belirsizlik": "orta", "kaynak": "ekip", "not": ""}
+{"id": "tp-0018", "prompt": "write a function to reverse a string", "gorev_turu": "kod", "belirsizlik": "orta", "kaynak": "ekip", "not": "İngilizce kontrol"}
+{"id": "tp-0019", "prompt": "anket sonuçlarını analiz et", "gorev_turu": "analiz", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
+{"id": "tp-0020", "prompt": "doğum günü mesajı", "gorev_turu": "yazi", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
