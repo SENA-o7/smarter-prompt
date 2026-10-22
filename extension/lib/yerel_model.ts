@@ -28,7 +28,7 @@ const JSON_SEMASI = {
   type: 'object',
   required: ['gorev_turu', 'eksik_bilgiler', 'secenekler'],
   properties: {
-    gorev_turu: { enum: ['kod', 'yazi', 'analiz', 'gorsel', 'diger'] },
+    gorev_turu: { enum: ['kod', 'yazi', 'analiz', 'gorsel', 'ses', 'matematik', 'diger'] },
     eksik_bilgiler: { type: 'array', items: { type: 'string' } },
     secenekler: {
       type: 'array',

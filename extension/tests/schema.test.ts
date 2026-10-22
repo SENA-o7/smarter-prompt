@@ -20,6 +20,12 @@ describe('EnhanceResponseSchema', () => {
     expect(EnhanceResponseSchema.safeParse(bozuk).success).toBe(false);
   });
 
+  it('v2 türlerini (ses, matematik) kabul eder', () => {
+    expect(EnhanceResponseSchema.safeParse({ ...gecerli, gorev_turu: 'ses' }).success).toBe(true);
+    expect(EnhanceResponseSchema.safeParse({ ...gecerli, gorev_turu: 'matematik' }).success).toBe(true);
+    expect(EnhanceResponseSchema.safeParse({ ...gecerli, gorev_turu: 'video' }).success).toBe(false);
+  });
+
   it('bilinmeyen stratejiyi reddeder', () => {
     const bozuk = {
       ...gecerli,

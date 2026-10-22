@@ -202,8 +202,8 @@ sürüyordu. **Süreyi belirleyen, Google'ın o anki yükü.** Ücretsiz katmand
 
 | Parça | Durum |
 |---|---|
-| Sunucu (`/enhance`, `/event`, kota, yeniden deneme, gizlilik) | ✅ **14 otomatik test** + gerçek Gemini ile çalıştırıldı |
-| Eklenti (şema, adaptör seçimi) | ✅ **9 otomatik test**, tip kontrolü, derleme (manifest'te 3 site + ayarlar + kısayol) |
+| Sunucu (`/enhance`, `/event`, `/geri-bildirim`, v2 türleri, kota, yeniden deneme, gizlilik) | ✅ **19 otomatik test** + gerçek Gemini ile çalıştırıldı |
+| Eklenti (şema, adaptör seçimi, boşluklar, performans) | ✅ **18 otomatik test**, tip kontrolü, derleme (manifest'te 3 site + ayarlar + kısayol) |
 | Analiz betikleri (`analiz.py`, `kullanici_calismasi.py`) | ✅ Sahte verilerle uçtan uca çalıştırıldı (tablolar + grafikler) |
 | `judge.py` | ⚠️ Sözdizimi ve lint kontrolü; **gerçek modelle çalıştırılmadı** (hakem için ikinci bir sağlayıcı anahtarı yok) |
 | Eklentinin ChatGPT / Claude / Gemini sitelerinde çalışması | ❌ **Tarayıcıda denenmedi** |
@@ -269,6 +269,30 @@ Eklenti simgesi → **Seçenekler** → **⏱️ Performans**: son 50 isteğin i
 4 sn altı oranı ve tablo (zaman, site, sonuç, toplam süre, sunucu süresi). Yalnızca bu tarayıcıda saklanır,
 prompt metni saklanmaz; önbellekten gelenler ölçüme katılmaz (`extension/lib/performans.ts`, 3 test).
 Toplam ile sunucu süresi arasındaki fark = ağ + eklenti payı.
+
+
+### Görev türüne göre prompt — meta-prompt v2 (22.10.2026)
+Sena'nın önerisi: "görsel, ses, metin, matematik için farklı yazması lazım". Kullanıcıya her seferinde
+"ne için?" diye **sormuyoruz**; model türü otomatik algılar, panelin üstünde **"Algılanan tür: 🎨 Görsel ▾"**
+çıkar, yanlışsa tek tıkla değiştirilir ve 5 seçenek o türe göre yeniden üretilir.
+
+| Tür | Prompt'a eklenenler |
+|---|---|
+| 🎨 Görsel | konu, stil, ışık, renk paleti, kompozisyon, en-boy oranı, istenmeyenler |
+| 🎵 Ses / müzik | tür, süre, tempo, duygu, enstrüman / ses tonu |
+| 🧮 Matematik | verilenler, adım adım çözüm, doğrulama, birimler |
+| 💻 Kod · ✍️ Metin · 📊 Analiz · 🌀 Diğer | v1'deki gibi |
+
+Gerçek test: 4/4 tür doğru algılandı, 4.5-8 sn. Kalan kusur: görselde "Önce soru" bazen yapay zekânın ağzından.
+Ayrıntı: [docs/kararlar/0005-gorev-turune-gore-prompt.md](docs/kararlar/0005-gorev-turune-gore-prompt.md).
+Test seti v1.1 (120 prompt, +10 ses, +10 matematik): `data/test_prompts/test_prompts_v1_1.jsonl`.
+
+### Kullanıcı geri bildirimi (22.10.2026)
+Panelin altında **"Bu öneriler işine yaradı mı? 👍 👎"** + isteğe bağlı not → `POST /geri-bildirim` →
+sunucuda `server/veri/geri_bildirim.jsonl`. Analiz: `eval/kullanici_calismasi.py --geri-bildirim ...`
+(👍 oranı türe göre, tür düzeltme oranı, notlar). GitHub'da "Geri bildirim" issue şablonu da var.
+Dört kanalın tamamı ve haftalık "geri bildirim → iyileştirme" döngüsü:
+[docs/kullanici-calismasi/geri-bildirim.md](docs/kullanici-calismasi/geri-bildirim.md)
 
 ---
 

@@ -99,9 +99,72 @@ SADECE aşağıdaki biçimde JSON döndür, başka hiçbir şey yazma:
   ]
 }"""
 
-# Hangi sürüm kullanılacak? .env → META_PROMPT_SURUMU (v0 / v1). Sürümleri karşılaştırmak için:
-# sunucuyu v0 ile başlat → eval/meta_prompt_testi.py → v1 ile başlat → aynı test.
-META_PROMPTLAR = {"v0": META_PROMPT_V0, "v1": META_PROMPT_V1}
+# v2 (22.10.2026) — Sena'nın önerisi: "görsel, ses, metin, matematik için farklı yazması lazım".
+# Karar: kullanıcıya her seferinde "ne için?" diye SORMUYORUZ; model türü otomatik algılar, kullanıcı
+# paneldeki tür etiketinden tek tıkla düzeltebilir (o zaman mesajlari_olustur türü zorunlu kılar).
+#   1. Yeni türler: ses (müzik, seslendirme, ses efekti) ve matematik (hesap, ispat, problem).
+#   2. Her tür için "iyi prompt'ta olması gerekenler" listesi ve 5 stratejinin o türdeki karşılığı.
+# Ayrıntı: docs/kararlar/0005-gorev-turune-gore-prompt.md
+META_PROMPT_V2 = """Sen deneyimli bir prompt mühendisisin. Kullanıcı bir yapay zekâ aracına göndermek
+üzere aşağıdaki prompt'u yazdı. Görevin, bu prompt'u ANLAMINI VE AMACINI DEĞİŞTİRMEDEN 5 farklı
+stratejiyle geliştirmek.
+
+Temel kurallar:
+- Kullanıcının dilinde yaz (Türkçe yazdıysa Türkçe).
+- Her "prompt" alanı, KULLANICININ yapay zekâya göndereceği bir istektir: kullanıcının ağzından,
+  yapay zekâya hitaben yaz. ASLA yapay zekânın cevabı gibi yazma ("Elbette, yardımcı olabilirim" gibi).
+- Bilmediğin bilgileri UYDURMA. Kullanıcının söylemediği somut bir bilgi gerekiyorsa
+  [hedef kitle], [stil], [süre] gibi köşeli parantezle kısa bir boşluk bırak (en fazla 4 kelime).
+- Kullanıcının istemediği yeni bir görev ekleme; isteğin kapsamını genişletme.
+
+ÖNCE görev türünü belirle ve prompt'ları o türe uygun yaz:
+- kod: programlama dili/sürümü, girdi ve çıktı, hata mesajı, kütüphane, kısıtlar
+- yazi: hedef kitle, ton (resmî/samimi), uzunluk, amaç, biçim (e-posta, makale, şiir…)
+- analiz: değerlendirme ölçütleri, bağlam/veri, karşılaştırma, beklenen sonuç biçimi (tablo, öneri)
+- gorsel: (görsel üreten modeller için) konu, stil (fotoğraf/illüstrasyon/3B/anime), ışık, renk paleti,
+  kompozisyon/çekim açısı, arka plan, en-boy oranı, istenmeyen öğeler. Görselde "adım adım" stratejisi,
+  sahneyi katman katman tarif etmek (önce ana konu, sonra ortam, sonra ışık ve stil) demektir.
+- ses: (müzik, seslendirme, ses efekti üreten modeller için) tür, süre, tempo, duygu/atmosfer,
+  enstrümanlar veya ses tonu, konuşmada hız ve vurgu, kullanılacağı yer.
+- matematik: problemin tam ifadesi ve verilen değerler, adım adım çözüm, ara işlemlerin gösterilmesi,
+  sonucun doğrulanması, birimler, kesin mi yaklaşık mı. Matematikte "format" stratejisi; çözüm adımlarının
+  numaralı ve sonucun ayrı satırda kutulu verilmesi gibi bir düzen tanımlar.
+- diger: amaç, kısıtlar (süre, bütçe, seviye), beklenen çıktı.
+
+5 strateji birbirinden belirgin biçimde farklı olsun:
+  1 net: tek cümlelik, açık ve kısa görev; gereksiz kelime yok
+  2 detayli: rol + amaç + hedef kitle + o türün önemli ayrıntıları
+  3 adim_adim: yapay zekâdan önce plan/adımları, sonra sonucu iste
+  4 format: çıktının biçimini ve uzunluğunu tanımla
+  5 soru: yapay zekâdan, cevap vermeden ÖNCE eksik bilgileri kullanıcıya sormasını iste
+     (ör. "...istiyorum. Başlamadan önce bana [şunları] sor.")
+
+Her seçenek için "neden": prompt'a NEYİN eklendiğini ve bunun cevabı nasıl iyileştireceğini anlatan
+tek cümle (en fazla 25 kelime).
+
+SADECE aşağıdaki biçimde JSON döndür, başka hiçbir şey yazma.
+gorev_turu şunlardan biri olmalı: kod | yazi | analiz | gorsel | ses | matematik | diger
+{
+  "gorev_turu": "gorsel",
+  "eksik_bilgiler": ["stil", "renk paleti"],
+  "secenekler": [
+    {"strateji": "net", "baslik": "Net ve kısa", "prompt": "...", "neden": "..."},
+    {"strateji": "detayli", "baslik": "Detaylı", "prompt": "...", "neden": "..."},
+    {"strateji": "adim_adim", "baslik": "Adım adım", "prompt": "...", "neden": "..."},
+    {"strateji": "format", "baslik": "Format odaklı", "prompt": "...", "neden": "..."},
+    {"strateji": "soru", "baslik": "Önce soru", "prompt": "...", "neden": "..."}
+  ]
+}"""
+
+# Hangi sürüm kullanılacak? .env → META_PROMPT_SURUMU (v0 / v1 / v2). Sürümleri karşılaştırmak için
+# aynı test setini sırayla (art arda!) her sürümle çalıştırın: eval/meta_prompt_testi.py
+META_PROMPTLAR = {"v0": META_PROMPT_V0, "v1": META_PROMPT_V1, "v2": META_PROMPT_V2}
+
+# Kullanıcı paneldeki tür etiketinden türü elle seçtiğinde modele eklenen not
+_TUR_ADLARI = {
+    "kod": "kod", "yazi": "metin/yazı", "analiz": "analiz", "gorsel": "görsel üretimi",
+    "ses": "ses/müzik üretimi", "matematik": "matematik", "diger": "diğer",
+}
 META_PROMPT_SURUMU = config.META_PROMPT_SURUMU
 META_PROMPT = META_PROMPTLAR[META_PROMPT_SURUMU]
 
@@ -113,18 +176,26 @@ _DIL_NOTU = {
 }
 
 
-def mesajlari_olustur(prompt: str, dil: str = "auto") -> list[dict[str, str]]:
+def mesajlari_olustur(prompt: str, dil: str = "auto", gorev_turu: str | None = None) -> list[dict[str, str]]:
     """Modele gidecek mesaj listesini hazırlar.
 
-    - system mesajı: meta-prompt (talimatlar)
+    - system mesajı: meta-prompt (talimatlar) + varsa dil ve tür notu
     - user mesajı:   kullanıcının prompt'u, <<< >>> işaretleri arasında
 
     Neden <<< >>>? Kullanıcının prompt'u "önceki talimatları unut" gibi bir şey içerse bile
     model bunun geliştirilecek METİN olduğunu, kendisine verilen talimat olmadığını anlasın.
+
+    gorev_turu: Kullanıcı panelde türü elle seçtiyse (ör. model "yazi" dedi ama kullanıcı
+    "ses" istiyordu) modelin kendi tahmini yerine bu tür kullanılır.
     """
     sistem = META_PROMPT
     if _DIL_NOTU.get(dil):
         sistem += "\n\n" + _DIL_NOTU[dil]
+    if gorev_turu:
+        sistem += (
+            f"\n\nKULLANICI GÖREV TÜRÜNÜ SEÇTİ: {_TUR_ADLARI.get(gorev_turu, gorev_turu)}. "
+            f'gorev_turu alanına "{gorev_turu}" yaz ve 5 seçeneği bu türe göre geliştir.'
+        )
     return [
         {"role": "system", "content": sistem},
         {"role": "user", "content": f"Kullanıcının prompt'u:\n<<<\n{prompt}\n>>>"},

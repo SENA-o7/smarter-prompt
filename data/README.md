@@ -8,6 +8,7 @@ Bu projede veri model eğitmek için değil, **test etmek ve etkiyi kanıtlamak*
 |---|---|---|---|
 | `test_prompts/test_prompts_v0.jsonl` | 20 prompt; meta-prompt v0'ın elle testi ve rakip analizi | ekip | ✅ |
 | `test_prompts/test_prompts_v1.jsonl` | 100 prompt (v0'ın 20'si + 80 yeni) | ekip (Claude ile taslak; ekip gözden geçirecek) | ✅ |
+| `test_prompts/test_prompts_v1_1.jsonl` | 120 prompt: v1 + 10 ses + 10 matematik (meta-prompt v2 türleri) | ekip | ✅ |
 | `test_prompts/test_prompts_v2.jsonl` | 200 prompt (6. hafta) | + LMSYS (repoya girmez) | ⬜ |
 | `reference/bpo_ornek_tr.jsonl` | 30-50 BPO çifti, Türkçeye çevrilmiş | thu-coai/BPO | ⬜ |
 | `raw/` | İndirilen ham veri — **git'e girmez** | `scripts/data/` | — |
@@ -18,7 +19,7 @@ Bu projede veri model eğitmek için değil, **test etmek ve etkiyi kanıtlamak*
 {"id": "tp-0042", "prompt": "bana kod yaz", "gorev_turu": "kod", "belirsizlik": "yuksek", "kaynak": "ekip", "not": ""}
 ```
 
-- `gorev_turu`: `kod | yazi | analiz | gorsel | diger`
+- `gorev_turu`: `kod | yazi | analiz | gorsel | ses | matematik | diger` (ses ve matematik v1.1'den itibaren)
 - `belirsizlik`: `dusuk | orta | yuksek`
 - `kaynak`: `ekip | gonullu | wildchat | lmsys`
 
@@ -39,3 +40,4 @@ Bu projede veri model eğitmek için değil, **test etmek ve etkiyi kanıtlamak*
 - v0 (21.10.2026): 20 ekip prompt'u.
 - v1 (21.10.2026): 100 prompt. Dağılım: kod 22, yazi 23, analiz 20, gorsel 16, diger 19; belirsizlik yuksek 55, orta 39, dusuk 6.
   WildChat kaynaklı prompt'lar v2'de `scripts/data/` betikleriyle eklenecek.
+- v1.1 (22.10.2026): 120 prompt. +10 ses, +10 matematik; "matematik sorusu çöz" diger → matematik.

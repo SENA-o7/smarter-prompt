@@ -17,6 +17,7 @@ import {
   EnhanceResponseSchema,
   type GelistirCevabi,
   type GelistirIstegi,
+  type GeriBildirimMesaji,
   type OlayMesaji,
 } from '../lib/schema';
 import { performansEkle } from '../lib/performans';
@@ -32,7 +33,7 @@ async function bulutGelistir(istek: GelistirIstegi, dil: string): Promise<Gelist
     const r = await fetch(`${SUNUCU_URL}/enhance`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: istek.prompt, site: istek.site, dil }),
+      body: JSON.stringify({ prompt: istek.prompt, site: istek.site, dil, gorev_turu: istek.gorev_turu }),
     });
     const govde = await r.json().catch(() => null);
 
@@ -56,7 +57,7 @@ async function bulutGelistir(istek: GelistirIstegi, dil: string): Promise<Gelist
 async function gelistir(istek: GelistirIstegi): Promise<GelistirCevabi> {
   const baslangic = performance.now();
   const [mod, dil] = await Promise.all([modAyari.getValue(), dilAyari.getValue()]);
-  const anahtar = `${mod}|${dil}|${istek.prompt.trim()}`;
+  const anahtar = `${mod}|${dil}|${istek.gorev_turu ?? 'oto'}|${istek.prompt.trim()}`;
   const kayitli = onbellek.get(anahtar);
   if (kayitli) {
     olcumuKaydet(istek, kayitli, baslangic, true);
@@ -110,15 +111,39 @@ async function olayGonder(mesaj: OlayMesaji) {
   }).catch(() => {}); // kayıt başarısız olsa bile kullanıcıyı rahatsız etme
 }
 
+/**
+ * Paneldeki 👍/👎 geri bildirimi. Kullanıcı butona basarak kendisi gönderdiği için araştırma
+ * onayından bağımsızdır; yine de prompt metni içermez. Başarılı olup olmadığını panele bildirir.
+ */
+async function geriBildirimGonder(mesaj: GeriBildirimMesaji): Promise<boolean> {
+  const oturum_id = await oturumKimligi.getValue();
+  try {
+    const r = await fetch(`${SUNUCU_URL}/geri-bildirim`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...mesaj.gb, oturum_id }),
+    });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
 export default defineBackground(() => {
   // İçerik betiğinden gelen mesajları dinle.
-  browser.runtime.onMessage.addListener((mesaj: GelistirIstegi | OlayMesaji, _gonderen, cevapla) => {
+  browser.runtime.onMessage.addListener(
+    (mesaj: GelistirIstegi | OlayMesaji | GeriBildirimMesaji, _gonderen, cevapla) => {
     if (mesaj?.tur === 'gelistir') {
       gelistir(mesaj).then(cevapla);
       return true; // "cevabı sonra vereceğim" demek; asenkron cevap için şart
     }
+    if (mesaj?.tur === 'geri_bildirim') {
+      geriBildirimGonder(mesaj).then(cevapla);
+      return true;
+    }
     if (mesaj?.tur === 'olay') olayGonder(mesaj);
-  });
+    },
+  );
 
   // Ctrl+Shift+E (wxt.config.ts → commands) → aktif sekmeye "kisayol" mesajı gönder.
   browser.commands.onCommand.addListener(async (komut) => {

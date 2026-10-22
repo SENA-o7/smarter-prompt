@@ -16,6 +16,7 @@ anlamak.
 **Hangi veriler toplanacak?**
 - Eklentide hangi seçeneği seçtiğiniz, görev türü, seçtikten sonra metni değiştirip değiştirmediğiniz ve
   seçim süreniz. Bu bilgiler rastgele bir katılımcı kodu ile, **isminiz olmadan** kaydedilir.
+- Panelde 👍/👎'ye basıp yazdığınız isteğe bağlı kısa notlar (en fazla 500 karakter; kişisel bilgi yazmayınız).
 - Anket cevaplarınız ve (katılırsanız) görüşme notları.
 
 **Hangi veriler toplanmayacak?**

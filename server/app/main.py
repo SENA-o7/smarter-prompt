@@ -7,6 +7,7 @@ Uç noktalar:
     GET  /health   → Sunucu ayakta mı, hangi model ve meta-prompt sürümü kullanılıyor?
     POST /enhance  → {"prompt": "bana kod yaz"} alır, 5 geliştirilmiş seçenek döndürür.
     POST /event    → Kullanıcı çalışması için anonim seçim kaydı (prompt metni YOK).
+    POST /geri-bildirim → Paneldeki 👍/👎 + isteğe bağlı kısa not.
 
 Çalıştırma:  uvicorn app.main:app --reload --port 8000
 Belgeler:    http://localhost:8000/docs  (FastAPI otomatik üretir, buradan deneyebilirsiniz)
@@ -30,7 +31,7 @@ from slowapi.util import get_remote_address
 from . import config
 from .meta_prompt import META_PROMPT_SURUMU, ciktiyi_ayristir, mesajlari_olustur
 from .providers import LLM, litellm_tamamla
-from .schemas import EnhanceRequest, EnhanceResponse, SecimOlayi
+from .schemas import EnhanceRequest, EnhanceResponse, GeriBildirim, SecimOlayi
 
 log = logging.getLogger("smarter_prompt")
 
@@ -91,7 +92,7 @@ async def enhance(
         4. Hâlâ başarısızsa anlaşılır bir Türkçe hata döner (429 / 502 / 503).
     """
     baslangic = time.perf_counter()
-    mesajlar = mesajlari_olustur(govde.prompt, govde.dil)
+    mesajlar = mesajlari_olustur(govde.prompt, govde.dil, govde.gorev_turu)
 
     son_hata: Exception | None = None
     for deneme in range(1, DENEME_SAYISI + 1):
@@ -128,6 +129,10 @@ async def enhance(
         # for döngüsü break olmadan bittiyse: hiçbir deneme geçerli cevap üretemedi
         raise HTTPException(502, "Model geçerli bir cevap üretemedi, tekrar deneyin.") from son_hata
 
+    # Kullanıcı türü elle seçtiyse model başka bir tür yazmış olsa bile kullanıcının seçimi geçerli
+    if govde.gorev_turu:
+        sonuc.gorev_turu = govde.gorev_turu
+
     # 3) Cevaba ölçüm için ek bilgiler ekle: hangi model, hangi meta-prompt sürümü, kaç ms sürdü.
     #    Bu alanlar değerlendirmede (eval/) gecikme ve sürüm karşılaştırması için kullanılır.
     return EnhanceResponse(
@@ -136,6 +141,15 @@ async def enhance(
         meta_prompt_surumu=META_PROMPT_SURUMU,
         sure_ms=round((time.perf_counter() - baslangic) * 1000),
     )
+
+
+def jsonl_ekle(yol: str, kayit: dict) -> None:
+    """Kaydın başına UTC zaman damgası ekleyip JSONL dosyasının sonuna bir satır yazar."""
+    dosya = Path(yol)
+    dosya.parent.mkdir(parents=True, exist_ok=True)
+    satir = {"zaman": datetime.now(UTC).isoformat(timespec="seconds"), **kayit}
+    with dosya.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(satir, ensure_ascii=False) + "\n")
 
 
 @app.post("/event", status_code=204)
@@ -147,8 +161,15 @@ async def event(request: Request, olay: SecimOlayi) -> None:
     içermez ve fazladan alanları reddeder. IP adresi kaydedilmez.
     Analiz: python eval/kullanici_calismasi.py
     """
-    dosya = Path(config.OLAY_DOSYASI)
-    dosya.parent.mkdir(parents=True, exist_ok=True)
-    kayit = {"zaman": datetime.now(UTC).isoformat(timespec="seconds"), **olay.model_dump()}
-    with dosya.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(kayit, ensure_ascii=False) + "\n")
+    jsonl_ekle(config.OLAY_DOSYASI, olay.model_dump())
+
+
+@app.post("/geri-bildirim", status_code=204)
+@limiter.limit(config.HIZ_SINIRI)
+async def geri_bildirim(request: Request, gb: GeriBildirim) -> None:
+    """Kullanıcının panelde gönderdiği 👍/👎 ve notu kaydeder.
+
+    Kullanıcı bunu kendisi butona basarak gönderir (açık eylem). Prompt metni içermez; not alanı
+    500 karakterle sınırlı. IP adresi kaydedilmez. Analiz: python eval/kullanici_calismasi.py
+    """
+    jsonl_ekle(config.GERI_BILDIRIM_DOSYASI, gb.model_dump())

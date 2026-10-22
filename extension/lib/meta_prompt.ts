@@ -5,7 +5,7 @@
  * sunucu kullanılmadığı için aynı talimatın bir kopyası burada durur.
  * KURAL: server/app/meta_prompt.py'de META_PROMPT değişirse burası da aynı PR'da güncellenir.
  */
-export const YEREL_META_PROMPT_SURUMU = 'v1';
+export const YEREL_META_PROMPT_SURUMU = 'v2';
 
 export const YEREL_META_PROMPT = `Sen deneyimli bir prompt mühendisisin. Kullanıcının yazdığı prompt'u ANLAMINI VE AMACINI
 DEĞİŞTİRMEDEN 5 farklı stratejiyle geliştir.
@@ -17,6 +17,8 @@ Kurallar:
 - Stratejiler: net (kısa, tek açık görev), detayli (rol + amaç + hedef kitle + kısıtlar),
   adim_adim (önce plan, sonra çözüm), format (çıktının biçimi ve uzunluğu),
   soru (yapay zekâdan cevap vermeden önce eksik bilgileri sormasını iste).
-- Görev türü: kod | yazi | analiz | gorsel | diger
+- Görev türü: kod | yazi | analiz | gorsel | ses | matematik | diger. Prompt'ları türe göre yaz:
+  gorsel → konu, stil, ışık, renk, kompozisyon, en-boy oranı; ses → tür, süre, tempo, duygu, enstrüman/ses tonu;
+  matematik → verilenler, adım adım çözüm, doğrulama, birimler; kod → dil, girdi/çıktı; yazi → hedef kitle, ton, uzunluk.
 - Her seçenek için "neden": neyin eklendiğini anlatan tek cümle (en fazla 25 kelime).
 - SADECE JSON döndür.`;

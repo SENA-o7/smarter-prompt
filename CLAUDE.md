@@ -73,6 +73,11 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 ### Bitti
 - [x] **Yıldızlı arayüz** (22.10): gece paneli, strateji renkleri/simgeleri, parlayan küre, bekleme animasyonu, yıldızlı ayarlar sayfası; önizleme `docs/rapor/sekiller/arayuz-yildizli-onizleme.png`
 - [x] Boşluk doldurma **katman 1-2**: vurgu + kart altında "Doldurman gerekenler" listesi (yazdıkça önizleme yeşile döner)
+- [x] **Meta-prompt v2** (22.10): ses + matematik türleri, türe göre prompt; panelde "Algılanan tür ▾" ile tek tıkla düzeltme
+      (karar 0005). Gerçek test 4/4 tür doğru. Kusur: görselde "Önce soru" bazen yapay zekânın ağzından → v3
+- [x] **Geri bildirim**: panelde 👍/👎 + not → `POST /geri-bildirim` → `server/veri/geri_bildirim.jsonl`; analiz
+      `eval/kullanici_calismasi.py`; plan `docs/kullanici-calismasi/geri-bildirim.md`; GitHub issue şablonu
+- [x] Test seti v1.1 (120: +ses +matematik). Testler: sunucu 19/19, eklenti 18/18
 - [x] **Performans bölümü** (Ayarlar → ⏱️ Performans): istek, başarı, medyan, 4 sn altı; `lib/performans.ts`. Eklenti testleri 17/17
 - [x] Eklenti son kodla derlendi (`extension/.output/chrome-mv3`); kurulum ve deneme adımları kullanıcıya anlatıldı
 - [x] Hafta 1-4: iskelet, CI, sunucu, ChatGPT eklentisi, test seti v0/v1, veri betikleri, ölçüm, promptfoo (bkz. SENA_README)
@@ -87,6 +92,8 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [ ] **Tarayıcı testi** (Sena 22.10'da başladı; derlenmiş kopya: `D:\D_SenaOz\AI projesi\SmarterPrompt-Eklenti`): `npm run dev` → chatgpt.com, claude.ai, gemini.google.com → Geliştir → Kullan → Gönder. Seçici kırıksa `extension/adapters/<site>.ts`
 - [ ] Ayarlar sayfası, seçim kaydı (`server/veri/olaylar.jsonl`), Gemini Nano modu tarayıcıda
 - [ ] Repo: arkadaşları **collaborator** ekle (Settings → Collaborators); dal koruması; `GEMINI_API_KEY` secret
+- [ ] Tür algılama doğruluğunu 120 prompt'ta ölç (`--set data/test_prompts/test_prompts_v1_1.jsonl`), kotaya göre günlere böl
+- [ ] Meta-prompt v3: görselde "Önce soru" kullanıcının ağzından olsun (karar 0005)
 - [ ] Hakem için farklı aileden anahtar (ör. `OPENAI_API_KEY`) → `python eval/judge.py --limit 10`
 - [ ] Test seti v2 (200) — WildChat betikleri; v1'deki 100 prompt'u ekip gözden geçirsin
 - [ ] Süre hedefi (< 4 sn) tutmuyor: daha hızlı model / daha kısa meta-prompt dene
@@ -110,6 +117,7 @@ Durumlar: 💡 önerildi · 🗣️ tartışılıyor · ✅ kabul edildi (yapıl
 - 💡 Süre hedefi (< 4 sn) ücretsiz katmanda tutmuyor: daha kısa meta-prompt, akış (streaming) ile kartları tek tek
   göstermek veya ücretli katman — Claude (21.10.2026)
 - 💡 Hakem değerlendirmesi için farklı aileden ücretsiz bir model bulmak (OpenAI / Anthropic / Ollama yerel) — Claude (21.10.2026)
-- 🗣️ Görev türüne göre farklı prompt: görsel / ses / metin / matematik için farklı stratejiler; kullanıcıya her seferinde
-  sormak yerine otomatik algıla + panelde tek tıkla değiştirilebilen tür etiketi — Sena (22.10.2026)
+- ✅ Görev türüne göre farklı prompt: görsel / ses / metin / matematik; her seferinde sormak yerine otomatik algıla +
+  panelde tek tıkla değiştir — Sena (22.10.2026) — [0005](docs/kararlar/0005-gorev-turune-gore-prompt.md)
+- 💡 Video türü ayrı mı olmalı? Şimdilik görsel altında; geri bildirime göre karar — Claude (22.10.2026)
 <!-- Yeni fikirleri bu satırın üstüne ekleyin -->

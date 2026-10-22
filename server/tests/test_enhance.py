@@ -78,7 +78,7 @@ def test_enhance_basarili(client):
     assert r.status_code == 200
     govde = r.json()
     assert len(govde["secenekler"]) == 5
-    assert govde["meta_prompt_surumu"] in ("v0", "v1")
+    assert govde["meta_prompt_surumu"] in ("v0", "v1", "v2")
     assert govde["sure_ms"] >= 0
 
 
@@ -188,4 +188,56 @@ def test_meta_prompt_v1_soru_kurali_var():
     from app.meta_prompt import META_PROMPTLAR
 
     assert "kullanıcının ağzından" in META_PROMPTLAR["v1"]
-    assert set(META_PROMPTLAR) == {"v0", "v1"}
+    assert {"v0", "v1", "v2"} <= set(META_PROMPTLAR)
+
+
+# --- v2: görev türü (Sena'nın önerisi, 22.10.2026) ---------------------------
+
+
+def test_v2_ses_ve_matematik_turlerini_tanir():
+    from app.meta_prompt import META_PROMPTLAR
+
+    for tur in ("ses", "matematik", "gorsel"):
+        assert f"- {tur}:" in META_PROMPTLAR["v2"]
+
+
+def test_kullanici_turu_secince_modele_bildirilir_ve_cevapta_korunur(client):
+    llm = sahte_llm(json.dumps(GECERLI))  # model "kod" diyor
+    app.dependency_overrides[get_llm] = lambda: llm
+    r = client.post("/enhance", json={"prompt": "doğum günü şarkısı", "gorev_turu": "ses"})
+    assert r.status_code == 200
+    assert r.json()["gorev_turu"] == "ses"  # kullanıcının seçimi geçerli
+    assert "KULLANICI GÖREV TÜRÜNÜ SEÇTİ" in llm.cagrilar[0][0]["content"]
+
+
+def test_bilinmeyen_tur_reddedilir(client):
+    r = client.post("/enhance", json={"prompt": "x", "gorev_turu": "video"})
+    assert r.status_code == 422
+
+
+# --- /geri-bildirim ---------------------------------------------------------
+
+GB = {
+    "oturum_id": "abcd1234-ef",
+    "site": "gemini",
+    "puan": "iyi",
+    "yorum": "görsel prompt'ları çok iyiydi",
+    "gorev_turu": "gorsel",
+    "tur_elle_degisti": False,
+    "meta_prompt_surumu": "v2",
+}
+
+
+def test_geri_bildirim_dosyaya_yazar(client, tmp_path, monkeypatch):
+    dosya = tmp_path / "gb.jsonl"
+    monkeypatch.setattr("app.config.GERI_BILDIRIM_DOSYASI", str(dosya))
+    assert client.post("/geri-bildirim", json=GB).status_code == 204
+    assert json.loads(dosya.read_text(encoding="utf-8"))["puan"] == "iyi"
+
+
+def test_geri_bildirim_uzun_yorumu_ve_fazla_alani_reddeder(client, tmp_path, monkeypatch):
+    dosya = tmp_path / "gb.jsonl"
+    monkeypatch.setattr("app.config.GERI_BILDIRIM_DOSYASI", str(dosya))
+    assert client.post("/geri-bildirim", json={**GB, "yorum": "x" * 501}).status_code == 422
+    assert client.post("/geri-bildirim", json={**GB, "prompt": "gizli"}).status_code == 422
+    assert not dosya.exists()

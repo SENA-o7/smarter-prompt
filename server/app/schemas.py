@@ -14,7 +14,8 @@ from typing import Literal
 from pydantic import BaseModel, Field, model_validator
 
 # Literal: alan yalnızca bu değerlerden birini alabilir, başka bir şey gelirse hata verir.
-GorevTuru = Literal["kod", "yazi", "analiz", "gorsel", "diger"]
+# ses ve matematik 22.10.2026'da eklendi (meta-prompt v2): bu türler çok farklı prompt ister.
+GorevTuru = Literal["kod", "yazi", "analiz", "gorsel", "ses", "matematik", "diger"]
 Strateji = Literal["net", "detayli", "adim_adim", "format", "soru"]
 
 # Kartların panelde gösterileceği sabit sıra (model karışık sırada döndürse bile).
@@ -57,6 +58,8 @@ class EnhanceRequest(BaseModel):
     prompt: str = Field(min_length=1, max_length=4000)  # çok uzun metinler maliyeti artırır
     dil: Literal["tr", "en", "auto"] = "auto"  # auto: model dili kendisi algılar
     site: Literal["chatgpt", "claude", "gemini", "diger"] = "diger"  # istatistik için
+    # Kullanıcı paneldeki tür etiketinden türü elle seçtiyse; boşsa model kendisi algılar.
+    gorev_turu: GorevTuru | None = None
 
 
 class SecimOlayi(BaseModel):
@@ -77,9 +80,27 @@ class SecimOlayi(BaseModel):
     meta_prompt_surumu: str = Field(max_length=16)
 
 
+class GeriBildirim(BaseModel):
+    """POST /geri-bildirim: panelin altındaki 👍/👎 ve isteğe bağlı kısa not.
+
+    Kullanıcı bunu kendisi butona basarak gönderir. Prompt metni İÇERMEZ; serbest not alanı
+    500 karakterle sınırlı ve eklenti "kişisel bilgi yazmayın" uyarısı gösterir.
+    """
+
+    model_config = {"extra": "forbid"}
+
+    oturum_id: str = Field(min_length=8, max_length=64)
+    site: Literal["chatgpt", "claude", "gemini", "diger"]
+    puan: Literal["iyi", "kotu"]
+    yorum: str = Field(default="", max_length=500)
+    gorev_turu: GorevTuru
+    tur_elle_degisti: bool = False  # kullanıcı algılanan türü düzeltmek zorunda kaldı mı
+    meta_prompt_surumu: str = Field(max_length=16)
+
+
 class EnhanceResponse(GelistirmeSonucu):
     """/enhance cevabı = model çıktısı + ölçüm bilgileri."""
 
-    model: str  # hangi model kullanıldı (ör. gemini/gemini-2.5-flash)
+    model: str  # hangi model kullanıldı (ör. gemini/gemini-3.5-flash-lite)
     meta_prompt_surumu: str  # v0, v1, ... (deneylerde sürüm karşılaştırması için)
     sure_ms: int  # geliştirme kaç milisaniye sürdü (hedef: medyan < 4000)

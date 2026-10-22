@@ -10,7 +10,7 @@
 import './style.css';
 import { adaptoruSec, SITE_KALIPLARI } from '../../adapters';
 import { Panel } from '../../components/Panel';
-import type { GelistirCevabi, OlayMesaji } from '../../lib/schema';
+import type { GelistirCevabi, GeriBildirimMesaji, OlayMesaji } from '../../lib/schema';
 
 export default defineContentScript({
   matches: SITE_KALIPLARI, // chatgpt.com, chat.openai.com, claude.ai, gemini.google.com
@@ -30,6 +30,10 @@ export default defineContentScript({
           olayGonder: (olay) => {
             const mesaj: OlayMesaji = { tur: 'olay', olay };
             browser.runtime.sendMessage(mesaj).catch(() => {});
+          },
+          geriBildirim: (gb) => {
+            const mesaj: GeriBildirimMesaji = { tur: 'geri_bildirim', gb };
+            return browser.runtime.sendMessage(mesaj) as Promise<boolean>;
           },
         });
         // Arka plan betiği Ctrl+Shift+E kısayolunu bildirirse butona basılmış gibi davran

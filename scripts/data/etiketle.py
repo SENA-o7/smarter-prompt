@@ -4,7 +4,7 @@ Kullanım:
     python scripts/data/etiketle.py data/raw/adaylar_wildchat.jsonl data/test_prompts/test_prompts_v2.jsonl
 
 Her aday için görev türü ve belirsizlik sorulur. Kısayollar:
-    görev türü : k=kod  y=yazi  a=analiz  g=gorsel  d=diger   s=atla   q=çık
+    görev türü : k=kod  y=yazi  a=analiz  g=gorsel  s=ses  m=matematik  d=diger   x=atla   q=çık
     belirsizlik: 1=dusuk  2=orta  3=yuksek
 
 Etiketlenenler çıktı dosyasının SONUNA eklenir ve id'ler kaldığı yerden devam eder;
@@ -18,7 +18,7 @@ import json
 import sys
 from pathlib import Path
 
-GOREV = {"k": "kod", "y": "yazi", "a": "analiz", "g": "gorsel", "d": "diger"}
+GOREV = {"k": "kod", "y": "yazi", "a": "analiz", "g": "gorsel", "s": "ses", "m": "matematik", "d": "diger"}
 BELIRSIZLIK = {"1": "dusuk", "2": "orta", "3": "yuksek"}
 
 
@@ -50,10 +50,10 @@ def main() -> None:
             if aday["prompt"] in etiketli:
                 continue
             print("\n" + "─" * 60 + f"\n{aday['prompt']}\n" + "─" * 60)
-            g = sor("Görev türü [k/y/a/g/d, s=atla, q=çık]: ", GOREV, ("s", "q"))
+            g = sor("Görev türü [k/y/a/g/s/m/d, x=atla, q=çık]: ", GOREV, ("x", "q"))
             if g == "q":
                 break
-            if g == "s":
+            if g == "x":
                 continue
             b = sor("Belirsizlik [1/2/3]: ", BELIRSIZLIK)
             not_ = input("Not (boş geçilebilir): ").strip()

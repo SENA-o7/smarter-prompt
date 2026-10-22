@@ -1,11 +1,13 @@
 """Kullanıcı çalışması analizi (8-9. hafta; AS3, AS5).
 
-İki veri kaynağı:
-  1. Anonim seçim kayıtları: sunucunun yazdığı server/veri/olaylar.jsonl (POST /event)
-  2. SUS anketi: Google Forms'tan CSV olarak indirilen yanıtlar (docs/kullanici-calismasi/sus-anketi.md)
+Üç veri kaynağı:
+  1. Anonim seçim kayıtları: server/veri/olaylar.jsonl (POST /event)
+  2. Paneldeki 👍/👎 geri bildirimleri: server/veri/geri_bildirim.jsonl (POST /geri-bildirim)
+  3. SUS anketi: Google Forms'tan CSV olarak indirilen yanıtlar (docs/kullanici-calismasi/sus-anketi.md)
 
 Kullanım:
-    python eval/kullanici_calismasi.py --olaylar server/veri/olaylar.jsonl --sus sus_yanitlari.csv
+    python eval/kullanici_calismasi.py --olaylar server/veri/olaylar.jsonl
+        --geri-bildirim server/veri/geri_bildirim.jsonl --sus sus_yanitlari.csv
 
 SUS CSV formatı: her satır bir katılımcı; "s1".."s10" sütunları (1-5 arası puan) ve
 isteğe bağlı "teknik" sütunu (evet/hayır) — teknik/teknik olmayan karşılaştırması için (H5).
@@ -47,6 +49,22 @@ def secim_analizi(olaylar: pd.DataFrame) -> pd.DataFrame:
     ).reset_index()
 
 
+def geri_bildirim_analizi(gb: pd.DataFrame) -> None:
+    """👍/👎 oranı (genel, türe göre), tür düzeltme oranı ve okunacak notlar."""
+    print(f"\n=== Geri bildirim (n = {len(gb)}) ===")
+    gb = gb.assign(iyi=(gb.puan == "iyi").astype(int))
+    print(f"👍 oranı: %{100 * gb.iyi.mean():.0f}")
+    print("\nGörev türüne göre 👍 oranı (%) ve sayı:")
+    print(gb.groupby("gorev_turu").iyi.agg(oran=lambda x: round(100 * x.mean()), n="count").to_string())
+    if "tur_elle_degisti" in gb:
+        print(f"\nKullanıcının algılanan türü düzelttiği oran: %{100 * gb.tur_elle_degisti.mean():.0f}"
+              "  (yüksekse tür algılama iyileştirilmeli)")
+    notlar = gb[gb.yorum.fillna("").str.strip() != ""]
+    print(f"\nOkunacak notlar ({len(notlar)}) — 👎 olanlar önce:")
+    for _, r in notlar.sort_values("iyi").iterrows():
+        print(f"  {'👍' if r.iyi else '👎'} [{r.gorev_turu}] {r.yorum}")
+
+
 def sus_analizi(sus: pd.DataFrame) -> None:
     sus = sus.assign(sus=sus.apply(sus_puani, axis=1))
     print(f"\n=== AS5: SUS (n = {len(sus)}) ===")
@@ -60,6 +78,7 @@ def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("--olaylar", type=Path, default=KOK / "server/veri/olaylar.jsonl")
+    ap.add_argument("--geri-bildirim", type=Path, default=KOK / "server/veri/geri_bildirim.jsonl")
     ap.add_argument("--sus", type=Path, help="SUS yanıtları CSV")
     args = ap.parse_args()
 
@@ -72,6 +91,11 @@ def main() -> None:
         print(f"\nToplu özet: {cikti.relative_to(KOK)}")
     else:
         print(f"Seçim kaydı yok: {args.olaylar}")
+
+    if args.geri_bildirim.exists():
+        geri_bildirim_analizi(pd.read_json(args.geri_bildirim, lines=True))
+    else:
+        print(f"Geri bildirim yok: {args.geri_bildirim}")
 
     if args.sus:
         sus_analizi(pd.read_csv(args.sus))

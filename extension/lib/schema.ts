@@ -8,7 +8,8 @@
 import { z } from 'zod';
 
 export const STRATEJILER = ['net', 'detayli', 'adim_adim', 'format', 'soru'] as const;
-export const GOREV_TURLERI = ['kod', 'yazi', 'analiz', 'gorsel', 'diger'] as const;
+// ses ve matematik meta-prompt v2 ile eklendi (server/app/schemas.py ile aynı olmalı)
+export const GOREV_TURLERI = ['kod', 'yazi', 'analiz', 'gorsel', 'ses', 'matematik', 'diger'] as const;
 
 /** Tek bir seçenek kartı */
 export const SecenekSchema = z.object({
@@ -57,6 +58,19 @@ export type SecimOlayi = {
 };
 
 // --- İçerik betiği ↔ arka plan betiği mesajları ---
-export type GelistirIstegi = { tur: 'gelistir'; prompt: string; site: Site };
+/** gorev_turu: kullanıcı paneldeki tür etiketinden türü elle seçtiyse; yoksa model kendisi algılar. */
+export type GelistirIstegi = { tur: 'gelistir'; prompt: string; site: Site; gorev_turu?: GorevTuru };
 export type GelistirCevabi = { ok: true; veri: EnhanceResponse } | { ok: false; hata: string };
 export type OlayMesaji = { tur: 'olay'; olay: Omit<SecimOlayi, 'oturum_id'> };
+
+/** POST /geri-bildirim gövdesi: paneldeki 👍/👎 + isteğe bağlı kısa not (prompt metni YOK). */
+export type GeriBildirim = {
+  oturum_id: string;
+  site: Site;
+  puan: 'iyi' | 'kotu';
+  yorum: string; // en fazla 500 karakter
+  gorev_turu: GorevTuru;
+  tur_elle_degisti: boolean;
+  meta_prompt_surumu: string;
+};
+export type GeriBildirimMesaji = { tur: 'geri_bildirim'; gb: Omit<GeriBildirim, 'oturum_id'> };

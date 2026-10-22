@@ -9,12 +9,23 @@
  */
 import type { SiteAdapter } from '../adapters/types';
 import { bosluklariBul, bosluklariDoldur, parcalaraAyir } from '../lib/bosluklar';
-import type { GelistirCevabi, GelistirIstegi, OlayMesaji, Secenek } from '../lib/schema';
+import {
+  GOREV_TURLERI,
+  type EnhanceResponse,
+  type GelistirCevabi,
+  type GelistirIstegi,
+  type GeriBildirimMesaji,
+  type GorevTuru,
+  type OlayMesaji,
+  type Secenek,
+} from '../lib/schema';
 
 /** Panelin dış dünyayla konuşma yolları (içerik betiğinde ve demoda farklı verilebilir). */
 export type PanelBaglantisi = {
   gelistir(istek: GelistirIstegi): Promise<GelistirCevabi>;
   olayGonder(olay: OlayMesaji['olay']): void;
+  /** 👍/👎 geri bildirimi; gönderildiyse true */
+  geriBildirim(gb: GeriBildirimMesaji['gb']): Promise<boolean>;
 };
 
 /** Her stratejinin simgesi ve kısa ipucu. Renkler style.css'te [data-strateji] ile verilir. */
@@ -24,6 +35,17 @@ const STRATEJI_GORUNUMU: Record<Secenek['strateji'], { simge: string; ipucu: str
   adim_adim: { simge: '🪜', ipucu: 'Önce plan, sonra çözüm' },
   format: { simge: '🧩', ipucu: 'Çıktının biçimi belli' },
   soru: { simge: '💬', ipucu: 'Önce eksikleri sorsun' },
+};
+
+/** Tür etiketinde görünen adlar (meta-prompt v2 türleri) */
+const TUR_GORUNUMU: Record<GorevTuru, string> = {
+  kod: '💻 Kod',
+  yazi: '✍️ Metin',
+  analiz: '📊 Analiz',
+  gorsel: '🎨 Görsel',
+  ses: '🎵 Ses / müzik',
+  matematik: '🧮 Matematik',
+  diger: '🌀 Diğer',
 };
 
 // Beklerken dönen küçük mesajlar (sıkılmasın diye)
@@ -45,6 +67,9 @@ export class Panel {
   private panelAcilis = 0; // seçim süresini ölçmek için
   private takipBitir: (() => void) | null = null;
   private mesajZamanlayici = 0;
+  private turAlani: HTMLDivElement; // "Algılanan tür: 🎨 Görsel ▾"
+  private geriAlani: HTMLDivElement; // 👍/👎 geri bildirim
+  private turElleDegisti = false; // kullanıcı algılanan türü düzeltti mi (geri bildirimde ölçülür)
 
   constructor(
     kok: HTMLElement,
@@ -83,8 +108,10 @@ export class Panel {
     this.durum = el('p', 'sp-durum');
     this.durum.setAttribute('aria-live', 'polite'); // ekran okuyucular durum değişimini okusun
     this.liste = el('div', 'sp-liste');
+    this.turAlani = el('div', 'sp-tur');
+    this.geriAlani = el('div', 'sp-geri');
     const icerik = el('div', 'sp-icerik');
-    icerik.append(ust, this.durum, this.liste);
+    icerik.append(ust, this.durum, this.turAlani, this.liste, this.geriAlani);
     this.kutu.append(gokyuzu, icerik);
     kok.append(this.kutu, this.kure);
 
@@ -95,13 +122,16 @@ export class Panel {
   }
 
   /** Yazı kutusundaki metni geliştirip seçenekleri gösterir. */
-  async gelistir() {
+  async gelistir(zorunluTur?: GorevTuru) {
     if (this.calisiyor) return;
     const kutu = this.adapter.kutuyuBul();
     const metin = kutu ? this.adapter.metniOku(kutu) : '';
     this.kutu.hidden = false;
     this.liste.replaceChildren();
     this.durum.className = 'sp-durum';
+    this.turAlani.replaceChildren();
+    this.geriAlani.replaceChildren();
+    if (!zorunluTur) this.turElleDegisti = false;
     if (!metin) {
       this.durum.textContent = '🌙 Önce yazı kutusuna kısa bir prompt yaz, sonra tekrar dene.';
       return;
@@ -111,7 +141,12 @@ export class Panel {
     this.beklemeyiGoster();
     let cevap: GelistirCevabi;
     try {
-      cevap = await this.baglanti.gelistir({ tur: 'gelistir', prompt: metin, site: this.adapter.site });
+      cevap = await this.baglanti.gelistir({
+        tur: 'gelistir',
+        prompt: metin,
+        site: this.adapter.site,
+        gorev_turu: zorunluTur,
+      });
     } catch {
       // Eklenti güncellendiyse eski sayfadaki betik arka planla konuşamaz
       cevap = { ok: false, hata: 'Eklenti yeniden yüklendi; sayfayı yenileyin.' };
@@ -134,6 +169,80 @@ export class Panel {
       (eksik_bilgiler.length ? ` · Eksik: ${eksik_bilgiler.join(', ')}` : '');
     this.panelAcilis = performance.now();
     this.liste.replaceChildren(...secenekler.map((s, i) => this.kart(s, i, metin, cevap.veri)));
+    this.turEtiketiniCiz(cevap.veri.gorev_turu);
+    this.geriBildirimiCiz(cevap.veri);
+  }
+
+  /**
+   * "Algılanan tür: 🎨 Görsel ▾" — model türü otomatik bulur; yanlışsa kullanıcı tek tıkla
+   * değiştirir ve 5 seçenek o türe göre yeniden üretilir (meta-prompt v2, karar 0005).
+   * Her seferinde "ne için kullanacaksın?" diye sormuyoruz: kısa prompt yazan kullanıcıyı yavaşlatır.
+   */
+  private turEtiketiniCiz(tur: GorevTuru) {
+    const etiket = el('label', 'sp-tur-etiket', 'Algılanan tür:');
+    const secim = el('select', 'sp-tur-sec');
+    secim.setAttribute('aria-label', 'Görev türü; değiştirirsen seçenekler yeniden üretilir');
+    for (const t of GOREV_TURLERI) {
+      const secenek = el('option', '', TUR_GORUNUMU[t]);
+      secenek.value = t;
+      secenek.selected = t === tur;
+      secim.append(secenek);
+    }
+    secim.addEventListener('change', () => {
+      this.turElleDegisti = true;
+      this.gelistir(secim.value as GorevTuru);
+    });
+    etiket.append(secim);
+    const ipucu = el('span', 'sp-tur-ipucu', this.turElleDegisti ? '✓ senin seçimin' : 'yanlışsa değiştir');
+    this.turAlani.replaceChildren(etiket, ipucu);
+  }
+
+  /** Panelin altı: "Bu öneriler işine yaradı mı? 👍 👎" → isteğe bağlı not → gönder. */
+  private geriBildirimiCiz(veri: EnhanceResponse) {
+    const soru = el('span', 'sp-geri-soru', 'Bu öneriler işine yaradı mı?');
+    const iyi = el('button', 'sp-geri-btn', '👍');
+    const kotu = el('button', 'sp-geri-btn', '👎');
+    iyi.setAttribute('aria-label', 'Evet, işime yaradı');
+    kotu.setAttribute('aria-label', 'Hayır, işime yaramadı');
+    const satir = el('div', 'sp-geri-satir');
+    satir.append(soru, iyi, kotu);
+
+    const notAlani = (puan: 'iyi' | 'kotu') => {
+      const yazi = el('textarea', 'sp-geri-not');
+      yazi.maxLength = 500;
+      yazi.rows = 2;
+      yazi.placeholder =
+        puan === 'iyi' ? 'En çok neyi beğendin? (isteğe bağlı)' : 'Ne eksikti, ne olmalıydı? (isteğe bağlı)';
+      // Sitenin klavye kısayolları yazarken tuşları çalmasın
+      for (const olay of ['keydown', 'keyup', 'keypress'] as const) {
+        yazi.addEventListener(olay, (e) => e.stopPropagation());
+      }
+      const uyari = el('small', 'sp-geri-uyari', 'Kişisel bilgi (isim, e-posta, şifre) yazma.');
+      const gonder = el('button', 'sp-geri-gonder', 'Gönder ✦');
+      gonder.addEventListener('click', async () => {
+        gonder.disabled = true;
+        const ok = await this.baglanti
+          .geriBildirim({
+            site: this.adapter.site,
+            puan,
+            yorum: yazi.value.trim(),
+            gorev_turu: veri.gorev_turu,
+            tur_elle_degisti: this.turElleDegisti,
+            meta_prompt_surumu: veri.meta_prompt_surumu,
+          })
+          .catch(() => false);
+        this.geriAlani.replaceChildren(
+          el('p', 'sp-geri-tesekkur', ok ? '💫 Teşekkürler! Geri bildirimin bize ulaştı.' : '☄️ Gönderilemedi; sunucu kapalı olabilir.'),
+        );
+      });
+      this.geriAlani.replaceChildren(satir, yazi, uyari, gonder);
+      satir.querySelectorAll('button').forEach((b) => (b.disabled = true));
+      (puan === 'iyi' ? iyi : kotu).classList.add('sp-secili');
+      yazi.focus();
+    };
+    iyi.addEventListener('click', () => notAlani('iyi'));
+    kotu.addEventListener('click', () => notAlani('kotu'));
+    this.geriAlani.replaceChildren(satir);
   }
 
   /** Beklerken: dönen mesaj + parıldayan yer tutucu kartlar. */
