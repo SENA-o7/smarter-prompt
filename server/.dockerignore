@@ -1,0 +1,9 @@
+# İmaja girmeyecekler: sanal ortam, testler, önbellekler ve GİZLİ .env
+.venv/
+tests/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+veri/
+.env
+*.pyc

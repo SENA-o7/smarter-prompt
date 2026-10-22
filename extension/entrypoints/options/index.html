@@ -12,6 +12,17 @@
       <h1>✨ Smarter Prompt — Ayarlar</h1>
 
       <section>
+        <h2>🛰️ Sunucu adresi</h2>
+        <label for="sunucu">Eklentinin bağlanacağı Smarter Prompt sunucusu</label>
+        <div class="satir">
+          <input id="sunucu" type="url" placeholder="http://localhost:8000" spellcheck="false" />
+          <button id="sunucuKaydet" type="button">Kaydet ve dene</button>
+        </div>
+        <p class="not" id="sunucuDurum">Kendi bilgisayarınızda çalıştırıyorsanız: <code>http://localhost:8000</code>.
+          Kullanıcı çalışmasında ekibin verdiği <code>https://…</code> adresini yazın.</p>
+      </section>
+
+      <section>
         <h2>Dil</h2>
         <label for="dil">Geliştirilmiş prompt'lar hangi dilde yazılsın?</label>
         <select id="dil">

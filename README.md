@@ -59,6 +59,15 @@ docs/        araştırma notları, karar kayıtları, haftalık günlükler, rap
 
 ### 1. Sunucu
 
+**En kolayı — Docker** (Python kurmaya gerek yok):
+```bash
+copy .env.example server\.env         # macOS/Linux: cp .env.example server/.env  → GEMINI_API_KEY'i doldur
+docker compose up --build
+```
+http://localhost:8000/health → `{"durum":"ok", ...}`. Seçim ve geri bildirim kayıtları `server/veri/` klasörüne yazılır.
+
+**Ya da Python ile:**
+
 ```bash
 cd server
 python -m venv .venv
@@ -80,7 +89,10 @@ npm install
 npm run dev        # Chrome açılır, eklenti yüklü gelir; kod değişince yenilenir
 ```
 
-Ayarlar: eklenti simgesine sağ tık → **Seçenekler** (dil, bulut/yerel mod, araştırma onayı).
+Ayarlar: eklenti simgesine sağ tık → **Seçenekler** (🛰️ sunucu adresi, dil, bulut/yerel mod, araştırma onayı, ⏱️ performans).
+Sunucu adresi değiştirilebildiği için aynı eklenti hem `localhost`'a hem ekibin ortak sunucusuna bağlanabilir.
+
+**Denemek isteyenler (katılımcılar, bilgisayar öğrencileri):** [docs/kullanici-calismasi/kurulum-talimati.md](docs/kullanici-calismasi/kurulum-talimati.md)
 
 Elle yüklemek için: `npm run build` → `chrome://extensions` → Geliştirici modu → **Paketlenmemiş öğe yükle** → `extension/.output/chrome-mv3`.
 

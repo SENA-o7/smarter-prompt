@@ -1,6 +1,7 @@
 # SUS anketi (System Usability Scale) + açık uçlu sorular
 
-Google Forms'a aktarın. Her soru **1 = Kesinlikle katılmıyorum … 5 = Kesinlikle katılıyorum** ölçeğinde.
+**Formu elle oluşturmayın:** [google-form/form_olustur.gs](google-form/form_olustur.gs) bu soruların hepsini (onam ve
+görüş sorularıyla birlikte) otomatik oluşturur. Aşağısı yalnızca metin hâlidir. Her soru **1 = Kesinlikle katılmıyorum … 5 = Kesinlikle katılıyorum** ölçeğinde.
 Form yanıtlarını CSV olarak indirip sütun adlarını `s1` … `s10` yapın; `teknik` sütunu ekleyin (evet/hayır).
 Puan hesabı: `python eval/kullanici_calismasi.py --sus yanitlar.csv` (0-100; literatür ortalaması 68).
 

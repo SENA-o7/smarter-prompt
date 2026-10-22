@@ -203,8 +203,9 @@ sürüyordu. **Süreyi belirleyen, Google'ın o anki yükü.** Ücretsiz katmand
 | Parça | Durum |
 |---|---|
 | Sunucu (`/enhance`, `/event`, `/geri-bildirim`, v2 türleri, kota, yeniden deneme, gizlilik) | ✅ **19 otomatik test** + gerçek Gemini ile çalıştırıldı |
-| Eklenti (şema, adaptör seçimi, boşluklar, performans) | ✅ **18 otomatik test**, tip kontrolü, derleme (manifest'te 3 site + ayarlar + kısayol) |
+| Eklenti (şema, adaptör seçimi, boşluklar, performans, sunucu adresi) | ✅ **20 otomatik test**, tip kontrolü, derleme (manifest'te 3 site + ayarlar + kısayol) |
 | Analiz betikleri (`analiz.py`, `kullanici_calismasi.py`) | ✅ Sahte verilerle uçtan uca çalıştırıldı (tablolar + grafikler) |
+| Docker imajı (`docker compose`) | ✅ Derlendi ve gerçek Gemini ile çalıştırıldı |
 | `judge.py` | ⚠️ Sözdizimi ve lint kontrolü; **gerçek modelle çalıştırılmadı** (hakem için ikinci bir sağlayıcı anahtarı yok) |
 | Eklentinin ChatGPT / Claude / Gemini sitelerinde çalışması | ❌ **Tarayıcıda denenmedi** |
 | Ayarlar sayfası, seçim kaydı, düzenlendi tespiti | ❌ Tarayıcıda denenmedi |
@@ -293,6 +294,18 @@ sunucuda `server/veri/geri_bildirim.jsonl`. Analiz: `eval/kullanici_calismasi.py
 (👍 oranı türe göre, tür düzeltme oranı, notlar). GitHub'da "Geri bildirim" issue şablonu da var.
 Dört kanalın tamamı ve haftalık "geri bildirim → iyileştirme" döngüsü:
 [docs/kullanici-calismasi/geri-bildirim.md](docs/kullanici-calismasi/geri-bildirim.md)
+
+
+### Docker, sunucu adresi ayarı ve anket formu (22.10.2026)
+- **Docker:** `server/Dockerfile` + kökte `docker-compose.yml` → `docker compose up --build`. Gerçek testte: konteyner
+  sağlıklı, root olmayan kullanıcı, Gemini ile /enhance 4.3 sn, /geri-bildirim dosyaya yazıyor, `.env` imaja girmiyor.
+  Aynı imaj Render / Hugging Face Spaces'e de yüklenebilir (platform `PORT` değişkenini verir).
+- **Sunucu adresi ayarı:** Ayarlar → 🛰️ Sunucu adresi → Kaydet ve dene. Chrome yalnızca o adres için izin ister
+  (`optional_host_permissions`). Şifresiz `http` yalnızca localhost'a izinli. Böylece **aynı zip** hem yerel hem
+  ortak sunucuyla çalışır; bilgisayar öğrencileri kendi sunucularını çalıştırıp çalışmaya katılırken ortak adresi yazar.
+- **Anket formu:** `docs/kullanici-calismasi/google-form/form_olustur.gs` → script.google.com'a yapıştır → Çalıştır →
+  onam + hakkında + 10 SUS + görüşler + görüşme gönüllülüğü olan form ve yanıt tablosu oluşur. E-posta toplamaz.
+- **Katılımcı rehberi:** `docs/kullanici-calismasi/kurulum-talimati.md` (Yol A hazır zip, Yol B GitHub + Docker).
 
 ---
 

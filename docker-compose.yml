@@ -1,0 +1,23 @@
+# Sunucuyu tek komutla çalıştırmak için (Python kurmaya gerek yok, yalnızca Docker):
+#
+#   1) copy .env.example server\.env      (macOS/Linux: cp .env.example server/.env) → GEMINI_API_KEY'i doldur
+#   2) docker compose up --build
+#   3) http://localhost:8000/health  →  {"durum":"ok", ...}
+#
+# Durdurmak: Ctrl+C  (ya da docker compose down)
+
+services:
+  sunucu:
+    build: ./server
+    ports:
+      - "8000:8000"
+    env_file:
+      - server/.env
+    environment:
+      # Docker içinde kayıt dosyaları kalıcı klasöre yazılsın
+      OLAY_DOSYASI: /app/veri/olaylar.jsonl
+      GERI_BILDIRIM_DOSYASI: /app/veri/geri_bildirim.jsonl
+    volumes:
+      # Seçim kayıtları ve geri bildirimler konteyner silinse de bilgisayarda kalsın: server/veri/
+      - ./server/veri:/app/veri
+    restart: unless-stopped

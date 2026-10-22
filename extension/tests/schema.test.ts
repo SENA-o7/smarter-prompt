@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { sunucuAdresiniDuzelt } from '../lib/config';
 import { EnhanceResponseSchema, STRATEJILER } from '../lib/schema';
 
 const gecerli = {
@@ -32,5 +33,18 @@ describe('EnhanceResponseSchema', () => {
       secenekler: [...gecerli.secenekler.slice(0, 4), { strateji: 'x', baslik: 'b', prompt: 'p', neden: 'n' }],
     };
     expect(EnhanceResponseSchema.safeParse(bozuk).success).toBe(false);
+  });
+});
+
+describe('sunucuAdresiniDuzelt', () => {
+  it('sondaki eğik çizgiyi ve yolu atar', () => {
+    expect(sunucuAdresiniDuzelt(' https://ornek.onrender.com/ ')).toBe('https://ornek.onrender.com');
+    expect(sunucuAdresiniDuzelt('http://localhost:8000/docs')).toBe('http://localhost:8000');
+  });
+
+  it('şifresiz http yalnızca kendi bilgisayarı için kabul edilir', () => {
+    expect(sunucuAdresiniDuzelt('http://ornek.com')).toBeNull();
+    expect(sunucuAdresiniDuzelt('ftp://ornek.com')).toBeNull();
+    expect(sunucuAdresiniDuzelt('olmayan adres')).toBeNull();
   });
 });

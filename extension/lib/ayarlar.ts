@@ -6,6 +6,7 @@
  * Ayarlar sayfası: entrypoints/options/ (eklenti simgesine sağ tık → Seçenekler).
  */
 import { storage } from 'wxt/utils/storage';
+import { SUNUCU_URL } from './config';
 
 /** Geliştirilmiş prompt'ların dili. auto = kullanıcının yazdığı dilde. */
 export const dilAyari = storage.defineItem<'auto' | 'tr' | 'en'>('sync:dil', { fallback: 'auto' });
@@ -31,3 +32,9 @@ export const kayitOnayi = storage.defineItem<boolean>('sync:kayitOnayi', { fallb
 export const oturumKimligi = storage.defineItem<string>('local:oturumId', {
   init: () => crypto.randomUUID(),
 });
+
+/**
+ * Sunucu adresi (ör. https://smarter-prompt.onrender.com). Ayarlar sayfasından değişir;
+ * değiştirirken Chrome kullanıcıdan o adrese erişim izni ister.
+ */
+export const sunucuAdresi = storage.defineItem<string>('sync:sunucuAdresi', { fallback: SUNUCU_URL });

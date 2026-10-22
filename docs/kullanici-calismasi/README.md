@@ -14,9 +14,10 @@
 | Dosya | Ne için |
 |---|---|
 | [onam-formu.md](onam-formu.md) | Bilgilendirilmiş onam formu (imzalatılacak / Google Forms'a aktarılacak) |
-| [kurulum-talimati.md](kurulum-talimati.md) | Katılımcıya gönderilecek kurulum adımları |
+| [kurulum-talimati.md](kurulum-talimati.md) | Katılımcı kurulumu: **Yol A** hazır zip (herkes), **Yol B** GitHub + Docker (bilgisayar öğrencileri) |
 | [gorevler.md](gorevler.md) | 1. gün yapılacak 5 standart görev |
-| [sus-anketi.md](sus-anketi.md) | SUS (10 soru) + 3 açık uçlu soru — Google Forms'a aktarın |
+| [sus-anketi.md](sus-anketi.md) | SUS (10 soru) + açık uçlu sorular (metin hâli) |
+| [google-form/](google-form/) | **Anket formunu tek tıkla oluşturan Google Apps Script** (onam + SUS + görüşler) ve kullanım rehberi |
 | [gorusme-rehberi.md](gorusme-rehberi.md) | 15 dakikalık yarı yapılandırılmış görüşme soruları |
 | [geri-bildirim.md](geri-bildirim.md) | **Geri bildirim kanalları, nerede toplandığı, haftalık iyileştirme döngüsü** |
 

@@ -2,7 +2,8 @@
  * AYARLAR SAYFASI: Eklenti simgesine sağ tık → "Seçenekler" ile açılır.
  * Her değişiklik anında chrome.storage'a kaydedilir (kaydet butonu yok).
  */
-import { dilAyari, kayitOnayi, modAyari, oturumKimligi } from '../../lib/ayarlar';
+import { dilAyari, kayitOnayi, modAyari, oturumKimligi, sunucuAdresi } from '../../lib/ayarlar';
+import { sunucuAdresiniDuzelt } from '../../lib/config';
 import { ozetle, performansKayitlari, type PerformansKaydi } from '../../lib/performans';
 import { yerelModelDurumu } from '../../lib/yerel_model';
 
@@ -22,7 +23,38 @@ function kaydedildi() {
   setTimeout(() => (p.textContent = ''), 1500);
 }
 
+/** Sunucu adresi: izin iste → kaydet → /health ile dene ve sonucu göster. */
+async function sunucuyuKur() {
+  const girdi = $<HTMLInputElement>('sunucu');
+  const durum = $('sunucuDurum');
+  girdi.value = await sunucuAdresi.getValue();
+
+  $('sunucuKaydet').addEventListener('click', async () => {
+    const adres = sunucuAdresiniDuzelt(girdi.value);
+    if (!adres) {
+      durum.textContent = '❌ Geçersiz adres. https://… ya da http://localhost:8000 biçiminde yazın.';
+      return;
+    }
+    // Chrome, eklentinin bu adrese istek atabilmesi için kullanıcıdan izin ister (buton tıklamasıyla olmalı)
+    const izin = await browser.permissions.request({ origins: [`${adres}/*`] }).catch(() => false);
+    if (!izin) {
+      durum.textContent = '❌ İzin verilmedi; eklenti bu adrese bağlanamaz.';
+      return;
+    }
+    await sunucuAdresi.setValue(adres);
+    girdi.value = adres;
+    durum.textContent = '⏳ Deneniyor…';
+    try {
+      const govde = await (await fetch(`${adres}/health`)).json();
+      durum.textContent = `✅ Bağlandı · model: ${govde.model} · meta-prompt: ${govde.meta_prompt}`;
+    } catch {
+      durum.textContent = '⚠️ Kaydedildi ama sunucuya ulaşılamadı. Sunucu açık mı?';
+    }
+  });
+}
+
 async function baslat() {
+  await sunucuyuKur();
   // Mevcut değerleri forma yükle
   const dil = $<HTMLSelectElement>('dil');
   dil.value = await dilAyari.getValue();

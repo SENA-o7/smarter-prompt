@@ -91,6 +91,28 @@ code {
   color: var(--altin);
 }
 
+/* ── Sunucu adresi ── */
+.satir {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+#sunucu {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--kenar);
+  border-radius: 10px;
+  background: var(--gece-2);
+  color: var(--metin);
+  font: 14px ui-monospace, Consolas, monospace;
+}
+
+.satir button {
+  margin-top: 0;
+}
+
 /* ── Performans ── */
 .olcumler {
   display: grid;

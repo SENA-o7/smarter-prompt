@@ -11,8 +11,7 @@
  * güvenlik kurallarına (CSP/CORS) takılabilir. Arka plan betiği eklentinin kendi
  * izinleriyle (wxt.config.ts → host_permissions) çalışır.
  */
-import { dilAyari, kayitOnayi, modAyari, oturumKimligi } from '../lib/ayarlar';
-import { SUNUCU_URL } from '../lib/config';
+import { dilAyari, kayitOnayi, modAyari, oturumKimligi, sunucuAdresi } from '../lib/ayarlar';
 import {
   EnhanceResponseSchema,
   type GelistirCevabi,
@@ -30,7 +29,7 @@ const onbellek = new Map<string, GelistirCevabi>();
 
 async function bulutGelistir(istek: GelistirIstegi, dil: string): Promise<GelistirCevabi> {
   try {
-    const r = await fetch(`${SUNUCU_URL}/enhance`, {
+    const r = await fetch(`${await sunucuAdresi.getValue()}/enhance`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt: istek.prompt, site: istek.site, dil, gorev_turu: istek.gorev_turu }),
@@ -50,7 +49,7 @@ async function bulutGelistir(istek: GelistirIstegi, dil: string): Promise<Gelist
     return { ok: true, veri: sonuc.data };
   } catch {
     // fetch hiç cevap alamadıysa (sunucu kapalı, ağ yok)
-    return { ok: false, hata: 'Sunucuya ulaşılamadı. Sunucu çalışıyor mu? (uvicorn app.main:app)' };
+    return { ok: false, hata: 'Sunucuya ulaşılamadı. Sunucu açık mı? Adresi Ayarlar sayfasından kontrol edin.' };
   }
 }
 
@@ -104,7 +103,7 @@ async function modelden(istek: GelistirIstegi, mod: string, dil: string): Promis
 async function olayGonder(mesaj: OlayMesaji) {
   if (!(await kayitOnayi.getValue())) return;
   const oturum_id = await oturumKimligi.getValue();
-  await fetch(`${SUNUCU_URL}/event`, {
+  await fetch(`${await sunucuAdresi.getValue()}/event`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...mesaj.olay, oturum_id }),
@@ -118,7 +117,7 @@ async function olayGonder(mesaj: OlayMesaji) {
 async function geriBildirimGonder(mesaj: GeriBildirimMesaji): Promise<boolean> {
   const oturum_id = await oturumKimligi.getValue();
   try {
-    const r = await fetch(`${SUNUCU_URL}/geri-bildirim`, {
+    const r = await fetch(`${await sunucuAdresi.getValue()}/geri-bildirim`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...mesaj.gb, oturum_id }),

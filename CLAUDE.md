@@ -78,6 +78,9 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [x] **Geri bildirim**: panelde 👍/👎 + not → `POST /geri-bildirim` → `server/veri/geri_bildirim.jsonl`; analiz
       `eval/kullanici_calismasi.py`; plan `docs/kullanici-calismasi/geri-bildirim.md`; GitHub issue şablonu
 - [x] Test seti v1.1 (120: +ses +matematik). Testler: sunucu 19/19, eklenti 18/18
+- [x] **Docker** (`server/Dockerfile`, `docker-compose.yml`): derlendi, gerçek Gemini ile test edildi
+- [x] **Sunucu adresi ayarı** (Ayarlar → 🛰️): aynı eklenti localhost ya da ortak sunucu; izin yalnızca o adrese. Eklenti testleri 20/20
+- [x] **Anket formu**: `docs/kullanici-calismasi/google-form/form_olustur.gs` (Apps Script, onam + SUS + görüşler); katılımcı rehberi Yol A/B
 - [x] **Performans bölümü** (Ayarlar → ⏱️ Performans): istek, başarı, medyan, 4 sn altı; `lib/performans.ts`. Eklenti testleri 17/17
 - [x] Eklenti son kodla derlendi (`extension/.output/chrome-mv3`); kurulum ve deneme adımları kullanıcıya anlatıldı
 - [x] Hafta 1-4: iskelet, CI, sunucu, ChatGPT eklentisi, test seti v0/v1, veri betikleri, ölçüm, promptfoo (bkz. SENA_README)
@@ -97,7 +100,8 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [ ] Hakem için farklı aileden anahtar (ör. `OPENAI_API_KEY`) → `python eval/judge.py --limit 10`
 - [ ] Test seti v2 (200) — WildChat betikleri; v1'deki 100 prompt'u ekip gözden geçirsin
 - [ ] Süre hedefi (< 4 sn) tutmuyor: daha hızlı model / daha kısa meta-prompt dene
-- [ ] Hafta 8: hocaya danış (etik), sunucuyu internete taşı (Render/HF Spaces), 12-15 katılımcı
+- [ ] Hafta 8: hocaya danış (etik), sunucuyu internete taşı (Docker imajı hazır → Render/HF Spaces), formu
+      `form_olustur.gs` ile oluştur, katılımcıya `kurulum-talimati.md` + ortak sunucu adresi gönder, 12-15 katılımcı
 - [ ] Hafta 10: rapor (`docs/rapor/`), sunum, demo videosu, `v1.0.0`
 - [ ] Gemini API anahtarı sohbete yapıştırıldı → test bitince AI Studio'dan yenile
 

@@ -17,6 +17,7 @@ Ham veriler (olaylar.jsonl, SUS yanıtları) repoya GİRMEZ; ekip Drive'ında sa
 """
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -65,7 +66,25 @@ def geri_bildirim_analizi(gb: pd.DataFrame) -> None:
         print(f"  {'👍' if r.iyi else '👎'} [{r.gorev_turu}] {r.yorum}")
 
 
+def form_sutunlarini_duzelt(df: pd.DataFrame) -> pd.DataFrame:
+    """Google Form CSV'sindeki "[s1] Bu eklentiyi..." gibi başlıkları "s1"e çevirir.
+
+    Form docs/kullanici-calismasi/google-form/form_olustur.gs ile oluşturulduysa her sorunun başında
+    [etiket] vardır; elle hazırlanmış CSV'de sütunlar zaten s1..s10 olabilir, ikisi de çalışır.
+    """
+    yeni = {}
+    for sutun in df.columns:
+        m = re.match(r"^\[(\w+)\]", str(sutun))
+        if m:
+            yeni[sutun] = m.group(1)
+    df = df.rename(columns=yeni)
+    if "teknik" in df.columns:
+        df["teknik"] = df["teknik"].astype(str).str.lower().map({"evet": "evet", "hayır": "hayir", "hayir": "hayir"})
+    return df
+
+
 def sus_analizi(sus: pd.DataFrame) -> None:
+    sus = form_sutunlarini_duzelt(sus)
     sus = sus.assign(sus=sus.apply(sus_puani, axis=1))
     print(f"\n=== AS5: SUS (n = {len(sus)}) ===")
     print(f"Ortalama {sus.sus.mean():.1f} · medyan {sus.sus.median():.1f} · std {sus.sus.std():.1f}"
