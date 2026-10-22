@@ -19,6 +19,7 @@ import {
   type GelistirIstegi,
   type OlayMesaji,
 } from '../lib/schema';
+import { performansEkle } from '../lib/performans';
 import { yerelGelistir } from '../lib/yerel_model';
 
 // Basit önbellek: Aynı prompt'a tekrar "Geliştir" denirse sunucuya tekrar gitmeyiz
@@ -53,11 +54,40 @@ async function bulutGelistir(istek: GelistirIstegi, dil: string): Promise<Gelist
 }
 
 async function gelistir(istek: GelistirIstegi): Promise<GelistirCevabi> {
+  const baslangic = performance.now();
   const [mod, dil] = await Promise.all([modAyari.getValue(), dilAyari.getValue()]);
   const anahtar = `${mod}|${dil}|${istek.prompt.trim()}`;
   const kayitli = onbellek.get(anahtar);
-  if (kayitli) return kayitli;
+  if (kayitli) {
+    olcumuKaydet(istek, kayitli, baslangic, true);
+    return kayitli;
+  }
 
+  const cevap = await modelden(istek, mod, dil);
+  olcumuKaydet(istek, cevap, baslangic, false);
+  if (cevap.ok) {
+    onbellek.set(anahtar, cevap);
+    // Map ekleme sırasını korur; ilk anahtar en eski kayıttır.
+    if (onbellek.size > ONBELLEK_BOYUTU) onbellek.delete(onbellek.keys().next().value!);
+  }
+  return cevap;
+}
+
+/** Süre ve sonucu yalnızca bu tarayıcıda saklar (Ayarlar → Performans). Prompt metni saklanmaz. */
+function olcumuKaydet(istek: GelistirIstegi, cevap: GelistirCevabi, baslangic: number, onbellekten: boolean) {
+  performansEkle({
+    zaman: new Date().toISOString(),
+    ok: cevap.ok,
+    uctan_uca_ms: Math.round(performance.now() - baslangic),
+    sunucu_ms: cevap.ok ? cevap.veri.sure_ms : null,
+    model: cevap.ok ? cevap.veri.model : null,
+    site: istek.site,
+    onbellekten,
+    hata: cevap.ok ? null : cevap.hata,
+  }).catch(() => {});
+}
+
+async function modelden(istek: GelistirIstegi, mod: string, dil: string): Promise<GelistirCevabi> {
   let cevap: GelistirCevabi;
   if (mod === 'yerel') {
     cevap = await yerelGelistir(istek.prompt);
@@ -65,12 +95,6 @@ async function gelistir(istek: GelistirIstegi): Promise<GelistirCevabi> {
     if (!cevap.ok) cevap = await bulutGelistir(istek, dil);
   } else {
     cevap = await bulutGelistir(istek, dil);
-  }
-
-  if (cevap.ok) {
-    onbellek.set(anahtar, cevap);
-    // Map ekleme sırasını korur; ilk anahtar en eski kayıttır.
-    if (onbellek.size > ONBELLEK_BOYUTU) onbellek.delete(onbellek.keys().next().value!);
   }
   return cevap;
 }

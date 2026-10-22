@@ -72,7 +72,8 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 
 ### Bitti
 - [x] **Yıldızlı arayüz** (22.10): gece paneli, strateji renkleri/simgeleri, parlayan küre, bekleme animasyonu, yıldızlı ayarlar sayfası; önizleme `docs/rapor/sekiller/arayuz-yildizli-onizleme.png`
-- [x] Boşluk doldurma **katman 1** (vurgu + rozet, `lib/bosluklar.ts`, 5 test). Eklenti testleri 14/14
+- [x] Boşluk doldurma **katman 1-2**: vurgu + kart altında "Doldurman gerekenler" listesi (yazdıkça önizleme yeşile döner)
+- [x] **Performans bölümü** (Ayarlar → ⏱️ Performans): istek, başarı, medyan, 4 sn altı; `lib/performans.ts`. Eklenti testleri 17/17
 - [x] Eklenti son kodla derlendi (`extension/.output/chrome-mv3`); kurulum ve deneme adımları kullanıcıya anlatıldı
 - [x] Hafta 1-4: iskelet, CI, sunucu, ChatGPT eklentisi, test seti v0/v1, veri betikleri, ölçüm, promptfoo (bkz. SENA_README)
 - [x] Hafta 5-6: Claude + Gemini adaptörleri, ortak Panel, ayarlar sayfası (dil, mod, onay), meta-prompt v1, model değişikliği
@@ -82,8 +83,7 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [x] Testler: sunucu 14/14, eklenti 9/9, tip kontrolü + derleme temiz
 
 ### Denenmedi / yapılacak (öncelik sırasıyla)
-- [ ] **Boşluk doldurma katman 2-3:** Kullan'da
-      doldurma formu + göndermeden önce yumuşak uyarı → `docs/kararlar/0004-bosluk-doldurma.md`. Ön koşul: tarayıcı testi
+- [ ] **Boşluk doldurma katman 3:** göndermeden önce yumuşak uyarı → `docs/kararlar/0004-bosluk-doldurma.md`. Ön koşul: tarayıcı testi
 - [ ] **Tarayıcı testi** (Sena 22.10'da başladı; derlenmiş kopya: `D:\D_SenaOz\AI projesi\SmarterPrompt-Eklenti`): `npm run dev` → chatgpt.com, claude.ai, gemini.google.com → Geliştir → Kullan → Gönder. Seçici kırıksa `extension/adapters/<site>.ts`
 - [ ] Ayarlar sayfası, seçim kaydı (`server/veri/olaylar.jsonl`), Gemini Nano modu tarayıcıda
 - [ ] Repo: arkadaşları **collaborator** ekle (Settings → Collaborators); dal koruması; `GEMINI_API_KEY` secret
@@ -110,4 +110,6 @@ Durumlar: 💡 önerildi · 🗣️ tartışılıyor · ✅ kabul edildi (yapıl
 - 💡 Süre hedefi (< 4 sn) ücretsiz katmanda tutmuyor: daha kısa meta-prompt, akış (streaming) ile kartları tek tek
   göstermek veya ücretli katman — Claude (21.10.2026)
 - 💡 Hakem değerlendirmesi için farklı aileden ücretsiz bir model bulmak (OpenAI / Anthropic / Ollama yerel) — Claude (21.10.2026)
+- 🗣️ Görev türüne göre farklı prompt: görsel / ses / metin / matematik için farklı stratejiler; kullanıcıya her seferinde
+  sormak yerine otomatik algıla + panelde tek tıkla değiştirilebilen tür etiketi — Sena (22.10.2026)
 <!-- Yeni fikirleri bu satırın üstüne ekleyin -->

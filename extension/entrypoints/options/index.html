@@ -41,6 +41,23 @@
         </p>
       </section>
 
+      <section>
+        <h2>⏱️ Performans</h2>
+        <p class="not">Son 50 "Geliştir" isteği — yalnızca bu tarayıcıda saklanır, prompt metni saklanmaz.
+          Önbellekten gelen (tekrarlanan) istekler ölçüme katılmaz.</p>
+        <div class="olcumler">
+          <div class="olcum"><span id="pIstek">–</span><small>istek</small></div>
+          <div class="olcum"><span id="pBasari">–</span><small>başarı</small></div>
+          <div class="olcum"><span id="pMedyan">–</span><small>medyan süre</small></div>
+          <div class="olcum"><span id="pHedef">–</span><small>4 sn altı</small></div>
+        </div>
+        <table>
+          <thead><tr><th>Zaman</th><th>Site</th><th>Sonuç</th><th>Toplam</th><th>Sunucu</th></tr></thead>
+          <tbody id="pTablo"><tr><td colspan="5" class="not">Henüz istek yok. Bir sitede ✦ Geliştir'e basın.</td></tr></tbody>
+        </table>
+        <button id="pTemizle" type="button">Kayıtları temizle</button>
+      </section>
+
       <p id="kaydedildi" role="status"></p>
     </main>
     <script type="module" src="./main.ts"></script>

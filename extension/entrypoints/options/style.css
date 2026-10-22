@@ -91,6 +91,69 @@ code {
   color: var(--altin);
 }
 
+/* ── Performans ── */
+.olcumler {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.olcum {
+  display: grid;
+  padding: 10px;
+  border: 1px solid var(--kenar);
+  border-radius: 12px;
+  background: rgb(11 16 38 / 0.5);
+  text-align: center;
+}
+
+.olcum span {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--altin);
+}
+
+.olcum small {
+  color: var(--soluk);
+  font-size: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th,
+td {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--kenar);
+  text-align: left;
+}
+
+th {
+  color: var(--soluk);
+  font-weight: 600;
+}
+
+button {
+  margin-top: 12px;
+  padding: 7px 14px;
+  border: 1px solid var(--kenar);
+  border-radius: 999px;
+  background: var(--cam);
+  color: var(--metin);
+  font: 600 13px system-ui, sans-serif;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .olcumler {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 #kaydedildi {
   min-height: 1.5em;
   color: var(--altin);

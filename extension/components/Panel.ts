@@ -8,7 +8,7 @@
  * Prompt'u ASLA kullanıcı adına göndermez; yalnızca yazı kutusuna yazar.
  */
 import type { SiteAdapter } from '../adapters/types';
-import { bosluklariBul, parcalaraAyir } from '../lib/bosluklar';
+import { bosluklariBul, bosluklariDoldur, parcalaraAyir } from '../lib/bosluklar';
 import type { GelistirCevabi, GelistirIstegi, OlayMesaji, Secenek } from '../lib/schema';
 
 /** Panelin dış dünyayla konuşma yolları (içerik betiğinde ve demoda farklı verilebilir). */
@@ -172,16 +172,21 @@ export class Panel {
     kart.dataset.strateji = s.strateji; // renk style.css'ten
     kart.style.setProperty('--sira', String(sira)); // kartlar sırayla süzülsün
 
+    // Kullanıcının boşluklara yazdıkları: { "hedef kitle": "lise öğrencileri", ... }
+    const degerler: Record<string, string> = {};
+
     const sec = el('button', 'sp-sec', 'Kullan ➜');
     sec.setAttribute('aria-label', `${s.baslik} seçeneğini kullan`);
     sec.addEventListener('click', () => {
       const kutu = this.adapter.kutuyuBul();
       if (!kutu) return;
+      // Doldurulan boşluklar metne yerleşir; boş bırakılanlar [köşeli parantez] olarak kalır
+      const sonMetin = bosluklariDoldur(s.prompt, degerler);
       this.orijinal = orijinal; // geri alabilmek için sakla
-      this.adapter.metniYaz(kutu, s.prompt);
+      this.adapter.metniYaz(kutu, sonMetin);
       this.geriAlBtn.hidden = false;
       this.kapat();
-      this.secimiTakipEt(kutu, s, veri, Math.round(performance.now() - this.panelAcilis));
+      this.secimiTakipEt(kutu, s, sonMetin, veri, Math.round(performance.now() - this.panelAcilis));
     });
 
     // Başlık satırı: simge rozeti + başlık/ipucu + Kullan
@@ -190,18 +195,52 @@ export class Panel {
     baslik.append(el('h3', '', s.baslik), el('span', 'sp-ipucu', gorunum.ipucu));
     ust.append(el('span', 'sp-rozet', gorunum.simge), baslik, sec);
 
-    // Prompt metni: [boşluklar] altın renkte vurgulanır (karar 0004, katman 1)
+    // Prompt metni: [boşluklar] altın renkte vurgulanır; kullanıcı listeye yazdıkça
+    // önizleme canlı güncellenir ve doldurulan yer yeşile döner (karar 0004)
     const prompt = el('p', 'sp-prompt');
-    for (const parca of parcalaraAyir(s.prompt)) {
-      prompt.append(parca.tur === 'bosluk' ? el('mark', 'sp-bosluk', parca.deger) : parca.deger);
-    }
-
+    const promptuCiz = () => {
+      prompt.replaceChildren();
+      for (const parca of parcalaraAyir(s.prompt)) {
+        if (parca.tur === 'metin') {
+          prompt.append(parca.deger);
+          continue;
+        }
+        const yazilan = degerler[parca.deger.slice(1, -1).trim()]?.trim();
+        prompt.append(yazilan ? el('mark', 'sp-dolu', yazilan) : el('mark', 'sp-bosluk', parca.deger));
+      }
+    };
+    promptuCiz();
     kart.append(ust, prompt);
-    const bosluk = bosluklariBul(s.prompt).length;
-    if (bosluk) {
-      const etiket = el('span', 'sp-doldur', `✏️ ${bosluk} boşluk doldurulacak`);
-      etiket.title = 'Köşeli parantezli yerleri kendi bilgilerinle değiştirirsen cevap daha iyi olur.';
-      kart.append(etiket);
+
+    // Doldurulacaklar listesi: her boşluk için bir satır + yazma kutusu (karar 0004, katman 2)
+    const bosluklar = bosluklariBul(s.prompt);
+    if (bosluklar.length) {
+      const liste = el('div', 'sp-doldur-liste');
+      const ozet = el('div', 'sp-doldur-baslik', `📝 Doldurman gerekenler (${bosluklar.length})`);
+      ozet.title = 'Doldurursan cevap sana daha uygun olur. Boş bırakırsan yapay zekâ kendisi karar verir.';
+      liste.append(ozet);
+      for (const ad of bosluklar) {
+        const satir = el('label', 'sp-doldur-satir');
+        const girdi = el('input', 'sp-doldur-girdi');
+        girdi.type = 'text';
+        girdi.placeholder = 'yaz ya da boş bırak';
+        girdi.addEventListener('input', () => {
+          degerler[ad] = girdi.value;
+          satir.classList.toggle('sp-tamam', girdi.value.trim() !== '');
+          promptuCiz();
+        });
+        // Enter → bu kartı kullan (formu doldurup hızlıca geçebilsin)
+        girdi.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') sec.click();
+        });
+        // Siteler (Gemini, ChatGPT) sayfa genelinde tuş dinler; yazarken tuşlar onlara sızmasın
+        for (const olay of ['keydown', 'keyup', 'keypress'] as const) {
+          girdi.addEventListener(olay, (e) => e.stopPropagation());
+        }
+        satir.append(el('span', 'sp-doldur-ad', ad), girdi);
+        liste.append(satir);
+      }
+      kart.append(liste);
     }
     kart.append(el('p', 'sp-neden', s.neden));
     return kart;
@@ -222,11 +261,12 @@ export class Panel {
   private secimiTakipEt(
     kutu: HTMLElement,
     s: Secenek,
+    yazilanMetin: string, // boşluklar doldurulmuş hâli: "düzenlendi mi" buna göre ölçülür
     veri: { gorev_turu: string; meta_prompt_surumu: string },
     secimSuresi: number,
   ) {
     this.takipBitir?.(); // önceki takip varsa bırak
-    let sonMetin = s.prompt;
+    let sonMetin = yazilanMetin;
     const kontrol = () => {
       const simdiki = this.adapter.metniOku(kutu);
       if (simdiki) {
@@ -239,7 +279,7 @@ export class Panel {
         site: this.adapter.site,
         strateji: s.strateji,
         gorev_turu: veri.gorev_turu as OlayMesaji['olay']['gorev_turu'],
-        duzenlendi: sonMetin.trim() !== s.prompt.trim(),
+        duzenlendi: sonMetin.trim() !== yazilanMetin.trim(),
         secim_suresi_ms: secimSuresi,
         meta_prompt_surumu: veri.meta_prompt_surumu,
       });

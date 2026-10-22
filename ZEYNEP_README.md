@@ -258,6 +258,18 @@ Renkleri değiştirmek için tek yer: `extension/entrypoints/content/style.css` 
 > Derlenmiş klasörü noktasız bir yere kopyalayın (ör. `D:\D_SenaOz\AI projesi\SmarterPrompt-Eklenti`) ve onu seçin.
 > Her `npm run build`'den sonra kopyayı yenileyip `chrome://extensions`'da 🔄'ye basın.
 
+
+### Doldurulacaklar listesi (22.10.2026)
+Her kartın altında **"📝 Doldurman gerekenler (n)"** listesi var; her boşluk için bir yazma kutusu. Yazdıkça
+kartın önizlemesinde boşluk yeşile döner. **Kullan** → doldurulmuş metin yazı kutusuna gider; boş bırakılanlar
+`[köşeli parantez]` olarak kalır. Enter = Kullan. Görsel: `docs/rapor/sekiller/arayuz-doldurma-listesi.png`
+
+### Performans ölçümü (22.10.2026)
+Eklenti simgesi → **Seçenekler** → **⏱️ Performans**: son 50 isteğin istek sayısı, başarı oranı, medyan süre,
+4 sn altı oranı ve tablo (zaman, site, sonuç, toplam süre, sunucu süresi). Yalnızca bu tarayıcıda saklanır,
+prompt metni saklanmaz; önbellekten gelenler ölçüme katılmaz (`extension/lib/performans.ts`, 3 test).
+Toplam ile sunucu süresi arasındaki fark = ağ + eklenti payı.
+
 ---
 
 ## Eklenecekler: boşluk doldurma (önerildi, sıradaki özellik)
