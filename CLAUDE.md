@@ -131,4 +131,7 @@ Durumlar: 💡 önerildi · 🗣️ tartışılıyor · ✅ kabul edildi (yapıl
 - ✅ Görev türüne göre farklı prompt: görsel / ses / metin / matematik; her seferinde sormak yerine otomatik algıla +
   panelde tek tıkla değiştir — Sena (22.10.2026) — [0005](docs/kararlar/0005-gorev-turune-gore-prompt.md)
 - 💡 Video türü ayrı mı olmalı? Şimdilik görsel altında; geri bildirime göre karar — Claude (22.10.2026)
+- ❌ "Pastel Defter" arayüzü (krem zemin, akordeon seçenekler, elle çizilmiş SVG resimler) denendi; Sena **yıldızlı
+  temayı daha çok beğendi**, geri alındı — Sena (22.10.2026). Kod geçmişte duruyor: geri getirmek için
+  `git revert 3ec65d3`. İçindeki akordeon / SVG resim fikirleri yıldızlı temaya ayrı ayrı uyarlanabilir.
 <!-- Yeni fikirleri bu satırın üstüne ekleyin -->
