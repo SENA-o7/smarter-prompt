@@ -57,7 +57,7 @@ npx promptfoo@latest eval -c eval/promptfoo/promptfooconfig.yaml
 
 ## Durum / Nerede kaldık
 
-**Son güncelleme: 21.10.2026 akşam — Sena (Claude Code ile)**
+**Son güncelleme: 22.10.2026 — Sena (Claude Code ile)**
 
 ### Şu an neredeyiz?
 Kod tarafında **hafta 1-9 yazıldı**. Hafta 1-4 tarayıcı dışında doğrulandı; 5-9'un kodu otomatik testlerden geçiyor
@@ -71,6 +71,8 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - Ayrıntılı gözlemler: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`, `ZEYNEP_README.md`.
 
 ### Bitti
+- [x] **Yıldızlı arayüz** (22.10): gece paneli, strateji renkleri/simgeleri, parlayan küre, bekleme animasyonu, yıldızlı ayarlar sayfası; önizleme `docs/rapor/sekiller/arayuz-yildizli-onizleme.png`
+- [x] Boşluk doldurma **katman 1** (vurgu + rozet, `lib/bosluklar.ts`, 5 test). Eklenti testleri 14/14
 - [x] Eklenti son kodla derlendi (`extension/.output/chrome-mv3`); kurulum ve deneme adımları kullanıcıya anlatıldı
 - [x] Hafta 1-4: iskelet, CI, sunucu, ChatGPT eklentisi, test seti v0/v1, veri betikleri, ölçüm, promptfoo (bkz. SENA_README)
 - [x] Hafta 5-6: Claude + Gemini adaptörleri, ortak Panel, ayarlar sayfası (dil, mod, onay), meta-prompt v1, model değişikliği
@@ -80,9 +82,9 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [x] Testler: sunucu 14/14, eklenti 9/9, tip kontrolü + derleme temiz
 
 ### Denenmedi / yapılacak (öncelik sırasıyla)
-- [ ] **Boşluk doldurma (önerildi, sıradaki özellik):** `[hedef kitle]` gibi boşluklar kartta vurgulansın + Kullan'da
+- [ ] **Boşluk doldurma katman 2-3:** Kullan'da
       doldurma formu + göndermeden önce yumuşak uyarı → `docs/kararlar/0004-bosluk-doldurma.md`. Ön koşul: tarayıcı testi
-- [ ] **Tarayıcı testi:** `npm run dev` → chatgpt.com, claude.ai, gemini.google.com → Geliştir → Kullan → Gönder. Seçici kırıksa `extension/adapters/<site>.ts`
+- [ ] **Tarayıcı testi** (Sena 22.10'da başladı; derlenmiş kopya: `D:\D_SenaOz\AI projesi\SmarterPrompt-Eklenti`): `npm run dev` → chatgpt.com, claude.ai, gemini.google.com → Geliştir → Kullan → Gönder. Seçici kırıksa `extension/adapters/<site>.ts`
 - [ ] Ayarlar sayfası, seçim kaydı (`server/veri/olaylar.jsonl`), Gemini Nano modu tarayıcıda
 - [ ] Repo: arkadaşları **collaborator** ekle (Settings → Collaborators); dal koruması; `GEMINI_API_KEY` secret
 - [ ] Hakem için farklı aileden anahtar (ör. `OPENAI_API_KEY`) → `python eval/judge.py --limit 10`

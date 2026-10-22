@@ -1,6 +1,6 @@
 # 0004 - Köşeli parantezli boşlukların kullanıcıya doldurtulması
 
-Tarih: 21.10.2026 · Durum: **önerildi** (henüz uygulanmadı) · Öneren: Sena
+Tarih: 21.10.2026 · Durum: **kısmen uygulandı** — Katman 1 ✅ (22.10.2026), Katman 2-3 ⬜ · Öneren: Sena
 
 ## Sorun
 Meta-prompt, bilinmeyen bilgileri uydurmamak için `[hedef kitle]`, `[programlama dili]` gibi boşluklar bırakıyor.
@@ -18,7 +18,7 @@ Reddedildi, çünkü:
 
 ## Önerilen çözüm: üç katman
 
-**Katman 1 — Kartta görünür kıl.** Kartlarda boşluklar renkli/vurgulu gösterilir; kart köşesinde
+**Katman 1 — Kartta görünür kıl.** ✅ Uygulandı: `extension/lib/bosluklar.ts` (+ 5 test), `components/Panel.ts`, altın renk vurgu ve rozet. Kartlarda boşluklar renkli/vurgulu gösterilir; kart köşesinde
 "✏️ 2 boşluk doldurulacak" rozeti olur. Öğretici: "iyi bir prompt'ta bu bilgiler olmalı".
 
 **Katman 2 — Seçerken doldurt (asıl çözüm).** Boşluklu bir kartta **Kullan**'a basınca panel küçük bir forma döner:

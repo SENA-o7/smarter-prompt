@@ -1,63 +1,82 @@
+/* Ayarlar sayfası: paneldeki yıldızlı gece temasının aynısı (bkz. content/style.css) */
 :root {
-  --bg: #ffffff;
-  --fg: #1f2328;
-  --soluk: #59636e;
-  --kenar: #d1d9e0;
-  --vurgu: #6d28d9;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1e1f22;
-    --fg: #e6edf3;
-    --soluk: #9198a1;
-    --kenar: #3d444d;
-    --vurgu: #a78bfa;
-  }
+  --gece-1: #0b1026;
+  --gece-2: #1b1145;
+  --gece-3: #2d1b5e;
+  --metin: #f4f1ff;
+  --soluk: #bdb6e0;
+  --kenar: rgb(255 255 255 / 0.12);
+  --cam: rgb(255 255 255 / 0.06);
+  --pembe: #ff7ac6;
+  --mor: #a78bfa;
+  --camgobegi: #67e8f9;
+  --altin: #ffd166;
+  --gradyan: linear-gradient(135deg, var(--pembe), var(--mor) 50%, var(--camgobegi));
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  background:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 120px 80px, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 200px 160px, var(--altin), transparent),
+    radial-gradient(1px 1px at 60px 210px, #dff9ff, transparent),
+    radial-gradient(1.5px 1.5px at 260px 40px, var(--camgobegi), transparent),
+    linear-gradient(160deg, var(--gece-1), var(--gece-2) 55%, var(--gece-3));
+  background-size: 300px 260px, 300px 260px, 300px 260px, 300px 260px, 300px 260px, 100% 100%;
+  background-attachment: fixed;
+  color: var(--metin);
+  font: 15px/1.55 system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 main {
   max-width: 640px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 32px 16px 48px;
 }
 
 h1 {
-  font-size: 22px;
+  font-size: 26px;
+  background: var(--gradyan);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 section {
   margin: 16px 0;
-  padding: 16px;
+  padding: 18px;
   border: 1px solid var(--kenar);
-  border-radius: 10px;
+  border-radius: 16px;
+  background: var(--cam);
+  backdrop-filter: blur(6px);
 }
 
 h2 {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   font-size: 16px;
+  color: var(--camgobegi);
 }
 
 label {
   display: block;
-  margin: 6px 0;
+  margin: 8px 0;
 }
 
 select {
-  margin-top: 4px;
-  padding: 6px;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--kenar);
+  border-radius: 10px;
+  background: var(--gece-2);
+  color: var(--metin);
+  font: inherit;
 }
 
 input {
-  accent-color: var(--vurgu);
+  accent-color: var(--pembe);
 }
 
 .not {
@@ -65,7 +84,15 @@ input {
   font-size: 13px;
 }
 
+code {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgb(255 209 102 / 0.14);
+  color: var(--altin);
+}
+
 #kaydedildi {
-  color: var(--vurgu);
   min-height: 1.5em;
+  color: var(--altin);
+  font-weight: 600;
 }

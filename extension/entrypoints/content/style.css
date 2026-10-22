@@ -1,63 +1,181 @@
-/* Shadow DOM icinde: sitenin CSS'i buraya sizmaz, bizimki de siteye. */
+/*
+ * SMARTER PROMPT — YILDIZLI GECE TEMASI
+ *
+ * Shadow DOM içinde: sitenin CSS'i buraya sızmaz, bizimki de siteye.
+ * Tema bilerek her zaman "gece gökyüzü": hangi site, açık ya da koyu modda olursa olsun
+ * panel kendi atmosferini taşır. Yazılar koyu zemin üzerinde yüksek kontrastlıdır.
+ *
+ * Renkler (tek yerden değiştirilir):
+ *   gece        #0b1026 → #1b1145 → #2d1b5e   (lacivertten mora gradyan)
+ *   vurgu       pembe #ff7ac6 · mor #a78bfa · camgöbeği #67e8f9
+ *   stratejiler net=camgöbeği · detaylı=lavanta · adım=altın · format=pembe · soru=nane
+ */
 :host {
-  --sp-bg: #ffffff;
-  --sp-fg: #1f2328;
-  --sp-soluk: #59636e;
-  --sp-kenar: #d1d9e0;
-  --sp-vurgu: #6d28d9;
-  --sp-vurgu-fg: #ffffff;
-  --sp-kart: #f6f8fa;
   all: initial;
+  --gece-1: #0b1026;
+  --gece-2: #1b1145;
+  --gece-3: #2d1b5e;
+  --metin: #f4f1ff;
+  --soluk: #bdb6e0;
+  --kenar: rgb(255 255 255 / 0.12);
+  --cam: rgb(255 255 255 / 0.06);
+  --pembe: #ff7ac6;
+  --mor: #a78bfa;
+  --camgobegi: #67e8f9;
+  --altin: #ffd166;
+  --koyu-yazi: #140b33;
+  --gradyan: linear-gradient(135deg, var(--pembe), var(--mor) 50%, var(--camgobegi));
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :host {
-    --sp-bg: #1e1f22;
-    --sp-fg: #e6edf3;
-    --sp-soluk: #9198a1;
-    --sp-kenar: #3d444d;
-    --sp-vurgu: #a78bfa;
-    --sp-vurgu-fg: #14111f;
-    --sp-kart: #26282c;
-  }
-}
-
-.sp-ana-buton {
+/* ───────────── Geliştir küresi ───────────── */
+.sp-kure {
   position: fixed;
-  right: 20px;
+  right: 22px;
   bottom: 96px;
   z-index: 2147483646;
-  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px 10px 14px;
   border: 0;
   border-radius: 999px;
-  background: var(--sp-vurgu);
-  color: var(--sp-vurgu-fg);
-  font: 600 14px/1 system-ui, sans-serif;
+  background: var(--gradyan);
+  background-size: 200% 200%;
+  color: var(--koyu-yazi);
+  font: 700 14px/1 system-ui, sans-serif;
+  letter-spacing: 0.2px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.25) inset,
+    0 6px 20px rgb(167 139 250 / 0.45),
+    0 0 28px rgb(255 122 198 / 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: sp-akis 6s ease-in-out infinite;
 }
 
+.sp-kure:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.35) inset,
+    0 10px 28px rgb(167 139 250 / 0.6),
+    0 0 40px rgb(103 232 249 / 0.45);
+}
+
+.sp-kure:focus-visible {
+  outline: 3px solid var(--altin);
+  outline-offset: 3px;
+}
+
+.sp-kure-yildiz {
+  font-size: 16px;
+  animation: sp-don 8s linear infinite;
+}
+
+/* Çalışırken küre daha hızlı parlar, yıldız hızlı döner */
+.sp-kure.sp-calisiyor {
+  animation-duration: 1.6s;
+}
+.sp-kure.sp-calisiyor .sp-kure-yildiz {
+  animation-duration: 1.2s;
+}
+
+/* ───────────── Panel ───────────── */
 .sp-panel {
   position: fixed;
-  right: 20px;
-  bottom: 140px;
+  right: 22px;
+  bottom: 148px;
   z-index: 2147483647;
-  width: min(440px, calc(100vw - 40px));
-  max-height: 70vh;
-  overflow-y: auto;
-  padding: 12px;
-  border: 1px solid var(--sp-kenar);
-  border-radius: 12px;
-  background: var(--sp-bg);
-  color: var(--sp-fg);
+  width: min(460px, calc(100vw - 32px));
+  max-height: min(72vh, 680px);
+  display: flex;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgb(255 122 198 / 0.18), transparent 60%),
+    radial-gradient(100% 70% at 0% 100%, rgb(103 232 249 / 0.14), transparent 60%),
+    linear-gradient(160deg, var(--gece-1), var(--gece-2) 55%, var(--gece-3));
+  color: var(--metin);
   font-size: 14px;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+  line-height: 1.5;
+  box-shadow:
+    0 0 0 1px var(--kenar),
+    0 24px 60px rgb(5 3 20 / 0.6),
+    0 0 50px rgb(167 139 250 / 0.25);
+  overflow: hidden;
+  animation: sp-belir 0.28s ease-out;
 }
 
 .sp-panel[hidden],
 .sp-ikincil[hidden] {
   display: none;
+}
+
+/* Yıldızlar: arkada, tıklamaları engellemeden */
+.sp-gokyuzu {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sp-yildizlar {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+}
+
+/* Küçük, sık yıldızlar */
+.sp-y1 {
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+    radial-gradient(1px 1px at 90px 120px, #fff, transparent),
+    radial-gradient(1px 1px at 160px 60px, #e9e4ff, transparent),
+    radial-gradient(1px 1px at 230px 170px, #fff, transparent),
+    radial-gradient(1px 1px at 50px 200px, #dff9ff, transparent),
+    radial-gradient(1px 1px at 130px 240px, #fff, transparent),
+    radial-gradient(1.2px 1.2px at 200px 20px, #fff, transparent),
+    radial-gradient(1px 1px at 10px 120px, #fff, transparent),
+    radial-gradient(1.2px 1.2px at 245px 95px, #e9e4ff, transparent),
+    radial-gradient(1px 1px at 75px 160px, #fff, transparent),
+    radial-gradient(1px 1px at 180px 210px, #dff9ff, transparent);
+  background-size: 260px 260px;
+  opacity: 0.9;
+  animation: sp-parilti 4s ease-in-out infinite;
+}
+
+/* Büyük, seyrek, renkli yıldızlar */
+.sp-y2 {
+  background-image:
+    radial-gradient(2px 2px at 70px 80px, var(--altin), transparent),
+    radial-gradient(1.5px 1.5px at 300px 40px, var(--camgobegi), transparent),
+    radial-gradient(2px 2px at 220px 300px, var(--pembe), transparent),
+    radial-gradient(1.5px 1.5px at 380px 210px, #fff, transparent);
+  background-size: 420px 380px;
+  animation: sp-parilti 6s ease-in-out 1.5s infinite;
+}
+
+/* Arada bir kayan yıldız */
+.sp-kayan {
+  position: absolute;
+  top: 12%;
+  left: -20%;
+  width: 90px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #fff);
+  border-radius: 2px;
+  opacity: 0;
+  transform: rotate(-18deg);
+  animation: sp-kay 9s ease-in 3s infinite;
+}
+
+/* İçerik yıldızların üstünde kayar */
+.sp-icerik {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(167 139 250 / 0.5) transparent;
 }
 
 .sp-ust {
@@ -66,64 +184,259 @@
   gap: 8px;
 }
 
-.sp-ust strong {
+.sp-logo {
   flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.sp-logo-yazi {
+  background: var(--gradyan);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .sp-ikincil {
-  padding: 4px 8px;
-  border: 1px solid var(--sp-kenar);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--sp-fg);
+  padding: 5px 10px;
+  border: 1px solid var(--kenar);
+  border-radius: 999px;
+  background: var(--cam);
+  color: var(--metin);
+  font: 600 12px/1 system-ui, sans-serif;
   cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sp-ikincil:hover {
+  background: rgb(255 255 255 / 0.14);
+}
+
+.sp-kapat {
+  width: 28px;
+  height: 28px;
+  padding: 0;
 }
 
 .sp-durum {
-  margin: 8px 0;
-  color: var(--sp-soluk);
-  font-size: 12px;
+  margin: 10px 2px;
+  color: var(--soluk);
+  font-size: 12.5px;
+}
+
+.sp-durum.sp-hata {
+  padding: 8px 10px;
+  border: 1px solid rgb(255 122 198 / 0.4);
+  border-radius: 10px;
+  background: rgb(255 122 198 / 0.1);
+  color: #ffd6ee;
 }
 
 .sp-liste {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
+/* ───────────── Kartlar ───────────── */
 .sp-kart {
-  padding: 10px;
-  border: 1px solid var(--sp-kenar);
-  border-radius: 8px;
-  background: var(--sp-kart);
+  --renk: var(--mor);
+  position: relative;
+  padding: 12px 12px 10px 14px;
+  border: 1px solid var(--kenar);
+  border-radius: 14px;
+  background: var(--cam);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  opacity: 0;
+  animation: sp-suzul 0.45s ease-out forwards;
+  animation-delay: calc(var(--sira, 0) * 70ms);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
+
+/* Sol kenarda stratejinin renginde parlayan şerit */
+.sp-kart::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--renk);
+  box-shadow: 0 0 12px var(--renk);
+}
+
+.sp-kart:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--renk) 55%, transparent);
+  box-shadow: 0 8px 24px rgb(5 3 20 / 0.45), 0 0 18px color-mix(in srgb, var(--renk) 30%, transparent);
+}
+
+.sp-kart[data-strateji='net'] { --renk: var(--camgobegi); }
+.sp-kart[data-strateji='detayli'] { --renk: #c4b5fd; }
+.sp-kart[data-strateji='adim_adim'] { --renk: var(--altin); }
+.sp-kart[data-strateji='format'] { --renk: #ff8fd1; }
+.sp-kart[data-strateji='soru'] { --renk: #6ee7b7; }
 
 .sp-kart-ust {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
+}
+
+.sp-rozet {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--renk) 18%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--renk) 45%, transparent) inset;
+  font-size: 16px;
+}
+
+.sp-kart-baslik {
+  flex: 1;
+  min-width: 0;
 }
 
 .sp-kart h3 {
   margin: 0;
-  font-size: 14px;
+  color: var(--renk);
+  font-size: 14.5px;
+  font-weight: 750;
+}
+
+.sp-ipucu {
+  display: block;
+  color: var(--soluk);
+  font-size: 11.5px;
 }
 
 .sp-sec {
-  padding: 4px 10px;
+  flex: none;
+  padding: 7px 12px;
   border: 0;
-  border-radius: 6px;
-  background: var(--sp-vurgu);
-  color: var(--sp-vurgu-fg);
+  border-radius: 999px;
+  background: var(--renk);
+  color: var(--koyu-yazi);
+  font: 700 12.5px/1 system-ui, sans-serif;
   cursor: pointer;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--renk) 45%, transparent);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.sp-sec:hover {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+}
+
+.sp-sec:focus-visible,
+.sp-ikincil:focus-visible {
+  outline: 2px solid var(--altin);
+  outline-offset: 2px;
 }
 
 .sp-prompt {
-  margin: 8px 0 4px;
+  margin: 10px 0 6px;
+  color: var(--metin);
   white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* [boşluk] vurgusu: altın renkte, kesikli çerçeve */
+.sp-bosluk {
+  padding: 0 4px;
+  border: 1px dashed rgb(255 209 102 / 0.7);
+  border-radius: 6px;
+  background: rgb(255 209 102 / 0.14);
+  color: var(--altin);
+  font-weight: 600;
+}
+
+.sp-doldur {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgb(255 209 102 / 0.12);
+  color: var(--altin);
+  font-size: 11.5px;
+  font-weight: 600;
 }
 
 .sp-neden {
   margin: 0;
-  color: var(--sp-soluk);
-  font-size: 12px;
+  color: var(--soluk);
+  font-size: 12.5px;
+  font-style: italic;
+}
+
+.sp-neden::before {
+  content: '✦ ';
+  color: var(--renk);
+  font-style: normal;
+}
+
+/* ───────────── Beklerken yer tutucu kartlar ───────────── */
+.sp-yer-tutucu {
+  min-height: 74px;
+}
+
+.sp-cizgi {
+  height: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.06));
+  background-size: 200% 100%;
+  animation: sp-isilti 1.4s linear infinite;
+}
+
+.sp-kisa { width: 35%; }
+.sp-orta { width: 70%; }
+
+/* ───────────── Animasyonlar ───────────── */
+@keyframes sp-akis {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes sp-don {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sp-belir {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sp-suzul {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sp-parilti {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes sp-kay {
+  0% { opacity: 0; transform: translateX(0) rotate(-18deg); }
+  3% { opacity: 1; }
+  12% { opacity: 0; transform: translateX(620px) rotate(-18deg); }
+  100% { opacity: 0; transform: translateX(620px) rotate(-18deg); }
+}
+
+@keyframes sp-isilti {
+  to { background-position: -200% 0; }
+}
+
+/* Hareket hassasiyeti olan kullanıcılar için tüm animasyonları durdur */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .sp-kart { opacity: 1; }
 }

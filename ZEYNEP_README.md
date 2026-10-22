@@ -237,6 +237,29 @@ sürüyordu. **Süreyi belirleyen, Google'ın o anki yükü.** Ücretsiz katmand
 
 ---
 
+## Yıldızlı arayüz (22.10.2026)
+
+Panel "gece gökyüzü" temasına geçti; ekran görüntüsü: [docs/rapor/sekiller/arayuz-yildizli-onizleme.png](docs/rapor/sekiller/arayuz-yildizli-onizleme.png)
+
+| Öğe | Ne yapıyor |
+|---|---|
+| **✦ Geliştir küresi** | Pembe → mor → camgöbeği akan gradyan; çalışırken daha hızlı parlar, yıldız döner |
+| **Gece paneli** | Lacivertten mora gradyan, iki katman parıldayan yıldız, arada bir kayan yıldız |
+| **Strateji renkleri** | ⚡ Net (camgöbeği) · 🔭 Detaylı (lavanta) · 🪜 Adım adım (altın) · 🧩 Format (pembe) · 💬 Önce soru (nane) |
+| **Kartlar** | Sırayla süzülerek gelir; solda parlayan renk şeridi; üstünde gelince hafif yükselir |
+| **Beklerken** | "Yıldızlar hizalanıyor…" gibi dönen mesajlar + parıldayan yer tutucu kartlar |
+| **Boşluk vurgusu** | `[hedef kitle]` gibi boşluklar altın renkte, kesikli çerçeveli + "✏️ 2 boşluk doldurulacak" rozeti (karar 0004, katman 1) |
+| **Ayarlar sayfası** | Aynı yıldızlı tema |
+| **Erişilebilirlik** | Koyu zemin üzerinde yüksek kontrast; "hareketi azalt" ayarı açık olanlarda tüm animasyonlar durur; klavye odağı altın çerçeve; Esc kapatır |
+
+Renkleri değiştirmek için tek yer: `extension/entrypoints/content/style.css` en üstteki `:host { --... }` değişkenleri.
+
+> 💡 Eklentiyi yüklerken klasör bulunamazsa: baştaki noktalı `.output` klasörü bazı pencerelerde görünmez.
+> Derlenmiş klasörü noktasız bir yere kopyalayın (ör. `D:\D_SenaOz\AI projesi\SmarterPrompt-Eklenti`) ve onu seçin.
+> Her `npm run build`'den sonra kopyayı yenileyip `chrome://extensions`'da 🔄'ye basın.
+
+---
+
 ## Eklenecekler: boşluk doldurma (önerildi, sıradaki özellik)
 
 **Fikir (Sena):** Önerilen prompt'larda `[hedef kitle]`, `[programlama dili]` gibi köşeli parantezli boşluklar var.
