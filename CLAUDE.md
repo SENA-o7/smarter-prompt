@@ -88,7 +88,14 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - [x] Hafta 7: `/event` anonim seçim kaydı (prompt metni yok, fazladan alan reddedilir), "düzenlendi" takibi, `eval/judge.py`
 - [x] Hafta 8: `docs/kullanici-calismasi/` (onam formu, kurulum, 5 görev, SUS, görüşme rehberi)
 - [x] Hafta 9: `eval/analiz.py`, `eval/kullanici_calismasi.py` (sahte veriyle doğrulandı), Gemini Nano yerel mod (deneysel)
-- [x] Testler: sunucu 14/14, eklenti 9/9, tip kontrolü + derleme temiz
+- [x] Testler (güncel): sunucu 19/19, eklenti 20/20, tip kontrolü + derleme temiz
+
+### ⭐ SIRADAKİ İŞ (Sena ile kararlaştırıldı, 22.10.2026)
+- [ ] **Ortak sunucuyu Render'a taşı** — gerçek katılımcılardan önce şart (Yol A ve geri bildirimlerin tek yerde
+      toplanması buna bağlı). Docker imajı hazır (`server/Dockerfile`). Gerekenler: Sena'nın Render hesabı (GitHub ile
+      giriş) + **yeni** Gemini anahtarı (sohbete yapıştırılan eski anahtar ortak sunucuda kullanılmayacak, AI Studio'dan
+      silinecek). Sonra: Render'da ortam değişkenleri (MODEL, GEMINI_API_KEY, META_PROMPT_SURUMU=v2), kalıcı disk ya da
+      günlük yedek (`server/veri/`), adres → katılımcı rehberine ve forma.
 
 ### Denenmedi / yapılacak (öncelik sırasıyla)
 - [ ] **Boşluk doldurma katman 3:** göndermeden önce yumuşak uyarı → `docs/kararlar/0004-bosluk-doldurma.md`. Ön koşul: tarayıcı testi
