@@ -1,32 +1,37 @@
-/* Ayarlar sayfası: paneldeki yıldızlı gece temasının aynısı (bkz. content/style.css) */
+/* Ayarlar sayfası: paneldeki "Pastel Defter" temasının aynısı (bkz. content/style.css) */
 :root {
-  --gece-1: #0b1026;
-  --gece-2: #1b1145;
-  --gece-3: #2d1b5e;
-  --metin: #f4f1ff;
-  --soluk: #bdb6e0;
-  --kenar: rgb(255 255 255 / 0.12);
-  --cam: rgb(255 255 255 / 0.06);
-  --pembe: #ff7ac6;
-  --mor: #a78bfa;
-  --camgobegi: #67e8f9;
-  --altin: #ffd166;
-  --gradyan: linear-gradient(135deg, var(--pembe), var(--mor) 50%, var(--camgobegi));
-  color-scheme: dark;
+  --kagit: #fffaf3;
+  --kart: #ffffff;
+  --cizgi: #f0e6d6;
+  --metin: #2b2620;
+  --soluk: #7b7365;
+  --vurgu: #ff9f43;
+  --vurgu-koyu: #3b2300;
+  --vurgu-zemin: #fff1cc;
+  --vurgu-yazi: #8a5a00;
+  --baslik: #2856a6;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --kagit: #241f1a;
+    --kart: #2e2822;
+    --cizgi: #433a30;
+    --metin: #f5eee4;
+    --soluk: #c2b6a4;
+    --vurgu: #ffad5c;
+    --vurgu-koyu: #2a1800;
+    --vurgu-zemin: #4a3a17;
+    --vurgu-yazi: #ffd98a;
+    --baslik: #a9c8ff;
+  }
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-    radial-gradient(1px 1px at 120px 80px, #fff, transparent),
-    radial-gradient(1.5px 1.5px at 200px 160px, var(--altin), transparent),
-    radial-gradient(1px 1px at 60px 210px, #dff9ff, transparent),
-    radial-gradient(1.5px 1.5px at 260px 40px, var(--camgobegi), transparent),
-    linear-gradient(160deg, var(--gece-1), var(--gece-2) 55%, var(--gece-3));
-  background-size: 300px 260px, 300px 260px, 300px 260px, 300px 260px, 300px 260px, 100% 100%;
-  background-attachment: fixed;
+  background: var(--kagit);
   color: var(--metin);
   font: 15px/1.55 system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
@@ -39,25 +44,20 @@ main {
 
 h1 {
   font-size: 26px;
-  background: var(--gradyan);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 section {
   margin: 16px 0;
   padding: 18px;
-  border: 1px solid var(--kenar);
-  border-radius: 16px;
-  background: var(--cam);
-  backdrop-filter: blur(6px);
+  border-radius: 18px;
+  background: var(--kart);
+  box-shadow: 0 0 0 1px var(--cizgi), 0 6px 16px rgb(80 60 30 / 0.06);
 }
 
 h2 {
   margin: 0 0 10px;
   font-size: 16px;
-  color: var(--camgobegi);
+  color: var(--baslik);
 }
 
 label {
@@ -68,15 +68,15 @@ label {
 select {
   margin-top: 6px;
   padding: 8px 10px;
-  border: 1px solid var(--kenar);
+  border: 1px solid var(--cizgi);
   border-radius: 10px;
-  background: var(--gece-2);
+  background: var(--kagit);
   color: var(--metin);
   font: inherit;
 }
 
 input {
-  accent-color: var(--pembe);
+  accent-color: var(--vurgu);
 }
 
 .not {
@@ -87,8 +87,8 @@ input {
 code {
   padding: 1px 6px;
   border-radius: 6px;
-  background: rgb(255 209 102 / 0.14);
-  color: var(--altin);
+  background: var(--vurgu-zemin);
+  color: var(--vurgu-yazi);
 }
 
 /* ── Sunucu adresi ── */
@@ -102,9 +102,9 @@ code {
   flex: 1;
   min-width: 0;
   padding: 8px 10px;
-  border: 1px solid var(--kenar);
+  border: 1px solid var(--cizgi);
   border-radius: 10px;
-  background: var(--gece-2);
+  background: var(--kagit);
   color: var(--metin);
   font: 14px ui-monospace, Consolas, monospace;
 }
@@ -124,16 +124,16 @@ code {
 .olcum {
   display: grid;
   padding: 10px;
-  border: 1px solid var(--kenar);
-  border-radius: 12px;
-  background: rgb(11 16 38 / 0.5);
+  border-radius: 14px;
+  background: var(--kagit);
+  box-shadow: 0 0 0 1px var(--cizgi);
   text-align: center;
 }
 
 .olcum span {
   font-size: 20px;
   font-weight: 800;
-  color: var(--altin);
+  color: var(--vurgu-yazi);
 }
 
 .olcum small {
@@ -150,7 +150,7 @@ table {
 th,
 td {
   padding: 6px 4px;
-  border-bottom: 1px solid var(--kenar);
+  border-bottom: 1px solid var(--cizgi);
   text-align: left;
 }
 
@@ -161,13 +161,18 @@ th {
 
 button {
   margin-top: 12px;
-  padding: 7px 14px;
-  border: 1px solid var(--kenar);
+  padding: 8px 15px;
+  border: 0;
   border-radius: 999px;
-  background: var(--cam);
-  color: var(--metin);
-  font: 600 13px system-ui, sans-serif;
+  background: var(--vurgu);
+  color: var(--vurgu-koyu);
+  font: 700 13px system-ui, sans-serif;
   cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
 }
 
 @media (max-width: 520px) {
@@ -178,6 +183,6 @@ button {
 
 #kaydedildi {
   min-height: 1.5em;
-  color: var(--altin);
+  color: var(--vurgu-yazi);
   font-weight: 600;
 }
