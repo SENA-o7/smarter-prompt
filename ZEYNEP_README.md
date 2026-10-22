@@ -238,25 +238,7 @@ sürüyordu. **Süreyi belirleyen, Google'ın o anki yükü.** Ücretsiz katmand
 
 ---
 
-## Arayüz: "Pastel Defter" (22.10.2026 öğleden sonra) — güncel
-
-Sena yıldızlı temayı beğenmedi; üç taslak hazırlandı (A/B/C), **A · Pastel Defter** seçildi
-(karar: [docs/kararlar/0006-arayuz-pastel-defter.md](docs/kararlar/0006-arayuz-pastel-defter.md)).
-
-| Öğe | Ne yapıyor |
-|---|---|
-| **Geliştir butonu** | Turuncu, üstünde küçük kalem resmi; çalışırken kalem "yazıyormuş gibi" sallanır |
-| **Başlık** | Kalem logosu + ad + **tür seçici `💻 Kod ▾`** + Geri al + Kapat |
-| **Seçenekler (akordeon)** | 5 satır: pastel resim + başlık + prompt'un tek satırlık özeti. Tıklanan açılır (aynı anda bir tane; ilki açık gelir) |
-| **Açık satır** | Tam prompt (boşluklar sarı, doldurulunca yeşil), "✏️ Doldurursan cevap sana daha uygun olur" listesi, 💡 neden, **Bunu kullan →** |
-| **Küçük resimler** | ⊙ Net: hedef tahtası · Detaylı: büyüteçli belge · Adım adım: bayraklı merdiven · Format: tablo · Önce soru: konuşma balonları (`components/resimler.ts`, elle çizilmiş SVG) |
-| **Tema** | Açık modda krem kâğıt; site/bilgisayar koyu moddaysa sıcak kakao tonları |
-| **Erişilebilirlik** | Satırlar klavyeyle açılır (Tab + Enter), ekran okuyucu için `aria-expanded`; "hareketi azalt"ta animasyon yok |
-
-Görseller: [açık tema](docs/rapor/sekiller/arayuz-pastel-acik.png) · [koyu tema](docs/rapor/sekiller/arayuz-pastel-koyu.png) ·
-[üç taslak](docs/rapor/sekiller/arayuz-taslaklar-abc.png)
-
-## ~~Yıldızlı arayüz~~ (22.10.2026 sabah — Pastel Defter ile değiştirildi, tarihçe için duruyor)
+## Yıldızlı arayüz (22.10.2026)
 
 Panel "gece gökyüzü" temasına geçti; ekran görüntüsü: [docs/rapor/sekiller/arayuz-yildizli-onizleme.png](docs/rapor/sekiller/arayuz-yildizli-onizleme.png)
 

@@ -24,8 +24,7 @@ her seçeneğin neden daha iyi olduğunu açıklar ve seçimi kullanıcıya bır
 - **Gerçek model testi** (`gemini-3.5-flash-lite`, 10 prompt, meta-prompt v0 ve v1): geçerli cevap %100, görev türü
   uyumu %100; süre Google'ın yüküne göre 4-21 sn (ayrıntı: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`).
 - **Meta-prompt v2** (22.10): görev türüne göre prompt (🎨 görsel, 🎵 ses, 🧮 matematik, 💻 kod, ✍️ metin…); tür otomatik
-  algılanır, panelde tek tıkla değiştirilir. Panelde 👍/👎 geri bildirim. "Pastel Defter" arayüzü (küçük resimler,
-  akordeon seçenekler, açık/koyu tema).
+  algılanır, panelde tek tıkla değiştirilir. Panelde 👍/👎 geri bildirim. Yıldızlı arayüz.
 - **Henüz tarayıcıda denenmedi.** Nerede kaldık ve sıradaki işler: [CLAUDE.md](CLAUDE.md)
 
 ## Sık sorulanlar

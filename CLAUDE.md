@@ -71,9 +71,7 @@ ama **tarayıcıda hiç denenmedi**. Kalanlar çoğunlukla insan işi (tarayıc�
 - Ayrıntılı gözlemler: `docs/kararlar/0003-model-ve-meta-prompt-v1.md`, `ZEYNEP_README.md`.
 
 ### Bitti
-- [x] **Arayüz: Pastel Defter** (22.10, karar 0006): akordeon satırlar, elle çizilmiş SVG resimler, açık/koyu tema;
-      yıldızlı temanın yerini aldı. Görseller `docs/rapor/sekiller/arayuz-pastel-*.png`
-- [x] ~~Yıldızlı arayüz~~ (22.10 sabah, değiştirildi): gece paneli, strateji renkleri/simgeleri, parlayan küre, bekleme animasyonu, yıldızlı ayarlar sayfası; önizleme `docs/rapor/sekiller/arayuz-yildizli-onizleme.png`
+- [x] **Yıldızlı arayüz** (22.10): gece paneli, strateji renkleri/simgeleri, parlayan küre, bekleme animasyonu, yıldızlı ayarlar sayfası; önizleme `docs/rapor/sekiller/arayuz-yildizli-onizleme.png`
 - [x] Boşluk doldurma **katman 1-2**: vurgu + kart altında "Doldurman gerekenler" listesi (yazdıkça önizleme yeşile döner)
 - [x] **Meta-prompt v2** (22.10): ses + matematik türleri, türe göre prompt; panelde "Algılanan tür ▾" ile tek tıkla düzeltme
       (karar 0005). Gerçek test 4/4 tür doğru. Kusur: görselde "Önce soru" bazen yapay zekânın ağzından → v3
